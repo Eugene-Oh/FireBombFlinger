@@ -10,12 +10,10 @@ class Player {
         this.gravity = 0.01;
         this.gravitySpeed = 0;
 
-        // Not jumping = 0, jumping = 1
+        // Crouching = -1, Not jumping = 0, jumping = 1
         this.jumping = 0;
-        // Not crouching = 0, crouching = 1
-        this.crouching = 0;
         // Left = 0, Right = 1
-        this.crouchedDirection = 1;
+        this.direction = 1;
         // Not shooting = 0, shooting = 1
         this.shooting = 0;
 
@@ -64,10 +62,10 @@ class Player {
         // Lateral and idle movements
         if (this.game.keys["a"] && !this.game.keys["d"] && !this.game.keys["s"]) {
             this.velocity = this.movementspeed * -1;
-            this.crouchedDirection = 0;
+            this.direction = 0;
         } else if (this.game.keys["d"] && !this.game.keys["a"] && !this.game.keys["s"]) {
             this.velocity = this.movementspeed;
-            this.crouchedDirection = 1;
+            this.direction = 1;
         } else {
             this.velocity = 0;
         };
@@ -79,12 +77,17 @@ class Player {
         } else if (this.game.keys["s"] && !this.game.keys["w"]) {
             // Crouched mechanics
             if (this.game.keys["a"] && !this.game.keys["d"]) {
-                this.crouchedDirection = -1;
+                this.direction = 0;
             } else if (this.game.keys["d"] && !this.game.keys["a"]) {
-                this.crouchedDirection = 1;
+                this.direction = 1;
             }
             this.jumping = -1;
         } else {
+            if (this.game.keys["a"] && !this.game.keys["d"]) {
+                this.direction = 0;
+            } else if (this.game.keys["d"] && !this.game.keys["a"]) {
+                this.direction = 1;
+            }
             this.jumping = 0;
         }
 
@@ -97,51 +100,58 @@ class Player {
     };
 
     draw(ctx) {
-        // Non-aerial movement
+        // Grounded movement
         if (this.jumping == 0) {
+            // The player is shooting
             if (this.shooting == 1) {
                 if (this.velocity == this.movementspeed) {
                     this.runshootinganimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
-                } else if (this.velocity == 0 && this.crouchedDirection == 1) {
+                } else if (this.velocity == 0 && this.direction == 1) {
                     this.idleshootinganimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
-                } else if (this.velocity == 0 && this.crouchedDirection == 0) {
+                } else if (this.velocity == 0 && this.direction == 0) {
                     this.idleshootingreverseanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 } else if (this.velocity == this.movementspeed * -1) {
                     this.runshootingreverseanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 }
+            // The player is not shooting
             } else {
                 if (this.velocity == this.movementspeed) {
                     this.runanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
-                } else if (this.velocity == 0 && this.crouchedDirection == 1) {
+                } else if (this.velocity == 0 && this.direction == 1) {
                     this.idleanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
-                } else if (this.velocity == 0 && this.crouchedDirection == 0) {
+                } else if (this.velocity == 0 && this.direction == 0) {
                     this.idleanimatorreverse.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 } else if (this.velocity == this.movementspeed * -1) {
                     this.runreverseanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 }
             } 
-        // Aerial movemment
+        // Jumping movemment
         } else if (this.jumping == 1) {
+            // The player is shooting
             if (this.shooting == 1) {
-                if (this.velocity == this.movementspeed || this.velocity == 0) {
+                if (this.velocity == this.movementspeed || this.velocity == 0 && this.direction == 1) {
                     this.jumpshootinganimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 } else {
                     this.jumpshootingreverseanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 }
+            // The player is not shooting
             } else {
-                if (this.velocity == this.movementspeed || this.velocity == 0) {
+                if (this.velocity == this.movementspeed || this.velocity == 0 && this.direction == 1) {
                     this.jumpanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 } else {
                     this.jumpreverseanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 }
             }
+        // Crouched movement
         } else {
-            if (this.crouchedDirection == 1) {
+            // The player is shooting
+            if (this.direction == 1) {  
                 if (this.shooting == 1) {
                     this.crouchedshootinganimator.drawFrame(this.game.clockTick, ctx, this.x, this.y + this.crouchedYReduction, this.size);
                 } else {
                     this.crouchedanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y + this.crouchedYReduction, this.size);
                 }
+            // The player is not shooting
             } else {
                 if (this.shooting == 1) {
                     this.crouchedshootingreverseanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y + this.crouchedYReduction, this.size);
