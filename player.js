@@ -2,27 +2,29 @@ class Player {
     constructor(game) {
         this.game = game;
 
-        this.x = 100;
+        this.x = 50;
         this.crouchedYReduction = 12;
-        this.y = 440; 
-        this.yBound = 440;
+        this.y = 0;
+        this.yBound= 440;
         this.velocityX = 0;
-        this.velocityY = 600;
-        this.gravity = 0.01;
-        this.gravitySpeed = 0; 
+        this.velocityY = 0;
+        this.gravity = 0.04;
+        this.jumpingHeight = 3;
+
         this.PLAYER_WIDTH = 21;
-        this.PLAYER_HEIGHT = 30;
+        this.PLAYER_HEIGHT = 34;
+
         // Crouching = -1, Not jumping = 0, jumping = 1
         this.jumping = 0;
         // Left = 0, Right = 1
         this.direction = 1;
         // Not shooting = 0, shooting = 1
         this.shooting = 0;
-    
+
         this.size = 2.25;
-        this.movementspeed = 2;
+        this.movementspeed = 1.5;
         this.animationspeed = .1
-        this.updateBB();
+
         this.runanimator = new Animator(ASSET_MANAGER.getAsset("./playersprite/run.png"),
         0, 0, 45, 34, 8, this.animationspeed);
         this.runreverseanimator = new Animator(ASSET_MANAGER.getAsset("./playersprite/runreverse.png"),
@@ -58,21 +60,22 @@ class Player {
         0, 0, 45, 30, 2, this.animationspeed + .1);
         this.idleshootingreverseanimator = new Animator(ASSET_MANAGER.getAsset("./playersprite/idleshootreverse.png"),
         0, 0, 45, 30, 2, this.animationspeed + .1);
-    }; 
-
+        
+        this.updateBB();
+    };
 
     updateBB() { 
         this.lastBB = this.BB;    
-        this.BB = new BoundingBox(this.x+this.PLAYER_WIDTH*2+this.size,this.y+this.PLAYER_HEIGHT/(this.size)-8,this.PLAYER_WIDTH*this.size,this.PLAYER_HEIGHT*this.size);
+        this.BB = new BoundingBox(this.x + this.PLAYER_WIDTH + 10, this.y, this.PLAYER_WIDTH * this.size - 5, this.PLAYER_HEIGHT * this.size - 6);
       //  this.BB = new BoundingBox(this.x+this.size+2*this.PLAYER_WIDTH,this.y+this.size*this.PLAYER_HEIGHT, this.PLAYER_WIDTH*this.size, this.PLAYER_HEIGHT*this.size); 
     };
 
-    update() { 
-        const TICK = this.gameclockTick;
+    update() {
+        const TICK = this.game.clockTick;
+
         // Lateral and idle movements
         if (this.game.keys["a"] && !this.game.keys["d"] && !this.game.keys["s"]) {
-            this.velocity = this.movementspeed * -1; 
-            this.updateBB();
+            this.velocity = this.movementspeed * -1;
             this.direction = 0;
         } else if (this.game.keys["d"] && !this.game.keys["a"] && !this.game.keys["s"]) {
             this.velocity = this.movementspeed;
@@ -80,14 +83,13 @@ class Player {
         } else {
             this.velocity = 0;
         };
-        this.x += this.velocity; 
-        this.updateBB();
+        this.x += this.velocity;
 
         // Jumping mechanics
-        if (this.game.keys["w"] && !this.game.keys["s"]) {
-            this.jumping = 1;  
-            this.y -= this.velocityY*TICK;
-        
+        if (this.game.keys["w"] && !this.game.keys["s"] /*&& this.y == this.yBound*/) {
+            this.jumping = 1;
+            this.velocityY = this.jumpingHeight;
+
         } else if (this.game.keys["s"] && !this.game.keys["w"]) {
             // Crouched mechanics
             if (this.game.keys["a"] && !this.game.keys["d"]) {
@@ -95,10 +97,7 @@ class Player {
             } else if (this.game.keys["d"] && !this.game.keys["a"]) {
                 this.direction = 1;
             }
-            this.jumping = -1; 
-            if(this.y <= this.yBound) { 
-                this.y += this.velocityY *TICK;
-            }
+            this.jumping = -1;
         } else {
             if (this.game.keys["a"] && !this.game.keys["d"]) {
                 this.direction = 0;
@@ -107,31 +106,47 @@ class Player {
             }
             this.jumping = 0;
         }
-
-        // Shooting mechanics
+        // Y-position and velocity updates
+        this.y -= this.velocityY;
+        this.velocityY -= this.gravity; 
+        /*
+        if (this.y > this.yBound) {
+            this.y = this.yBound
+            this.velocityY = 0;
+        } */
+         // Shooting mechanics
         if (this.game.keys["/"]) {
             this.shooting = 1;
         } else {
             this.shooting = 0;
-        } 
-  // collision start 
+        }
+        // Must update BB after each movement
+        this.updateBB();
+        
+        // Collisions
         var that = this; 
-        this.game.entities.forEach(function(entity) {  
-              if(entity.BB && that.BB.collide(entity.BB)) {  
-              
-                  if(that.velocity.y > 0) {   
-                      if(entity instanceof box) {  
-                        console.log("collided");
-                        that.velocity.y ===0;
-                      }
-                
-                  }  
-                  if(that.velocity.x > 0) { 
-                      that.velocity.x === 0;
-                  }
-              }
-        });
+        this.game.entities.forEach(function(entity) {
+            if(entity.BB && that.BB.collide(entity.BB)) {  
+                if(that.velocityY <0) { 
+                if(entity instanceof boundingfloor && (that.lastBB.bottom) <= entity.BB.top) { 
+                    console.log("floor Collide");   
+                    that.y = entity.BB.top - that.PLAYER_HEIGHT*that.size+6;
+                  //  that.y = that.yBound;
+                    that.velocityY = 0;
+                }
 
+                
+                 if (entity instanceof box && (that.lastBB.bottom) > entity.BB.top && that.lastBB.left< entity.BB.right ) {
+                    console.log("Collision here"); 
+                    that.x = entity.BB.left - that.PLAYER_WIDTH*that.size-25; 
+                    that.velocityX =0;
+                } else if(entity instanceof box && (that.lastBB.bottom) <= entity.BB.top) { 
+                    that.y = entity.BB.bottom; 
+                    that.velocityY = 0;
+                } 
+            } 
+        }
+        });
     };
 
     draw(ctx) {
@@ -194,7 +209,9 @@ class Player {
                     this.crouchedreverseanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y + this.crouchedYReduction, this.size);
                 }
             }
-        } 
-        ctx.strokeRect(this.x+this.PLAYER_WIDTH*2+this.size,this.y+this.PLAYER_HEIGHT/(this.size)-8,this.PLAYER_WIDTH*this.size,this.PLAYER_HEIGHT*this.size); 
+        }
+        // To see the bounding box
+        ctx.strokeStyle = 'white';
+        ctx.strokeRect(this.x + this.PLAYER_WIDTH + 10, this.y, this.PLAYER_WIDTH * this.size - 5, this.PLAYER_HEIGHT * this.size - 6);
     }
 }

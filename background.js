@@ -10,9 +10,6 @@ class Background {
     };
 
     draw(ctx) {
-        this.animator.drawFrame(this.game.clockTick, ctx, 0, 0, 0.665);
+        this.animator.drawFrame(this.game.clockTick, ctx, 0, 0, .665);
     };
-} 
-
-
-
+}
