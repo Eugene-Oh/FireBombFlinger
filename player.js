@@ -115,12 +115,13 @@ class Player {
         } else {
             this.shooting = 0;
         }
+        // Must update BB after each movement
         this.updateBB();
-          // collision start 
+        
+        // Collisions
         var that = this; 
         this.game.entities.forEach(function(entity) {
-            if(entity.BB && that.BB.collide(entity.BB) && !Player) { 
-                console.log(entity);
+            if(entity.BB && that.BB.collide(entity.BB)) { 
                 if (entity instanceof box) {
                     console.log("Collision here");
                 }

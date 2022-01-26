@@ -31,11 +31,11 @@ ASSET_MANAGER.downloadAll(() => {
 	const ctx = canvas.getContext("2d");
 	ctx.imageSmoothingEnabled = false;
 
-	// gameEngine.addEntity(new Sniper(gameEngine, 980, 383, 0));
-	// gameEngine.addEntity(new Sniper(gameEngine, 375, 0, 1));
+	gameEngine.addEntity(new Sniper(gameEngine, 980, 383, 0));
+	gameEngine.addEntity(new Sniper(gameEngine, 375, 0, 1));
 	gameEngine.addEntity(new Player(gameEngine));
 	gameEngine.addEntity(new box(gameEngine,705,1,604,300,128,127));
-	// gameEngine.addEntity(new Background(gameEngine));
+	gameEngine.addEntity(new Background(gameEngine));
 
 	//	gameEngine.addEntity(new boundingfloor(gameEngine));
 	//	gameEngine.addEntity(new box(gameEngine,100,150,832,896,128,128));
