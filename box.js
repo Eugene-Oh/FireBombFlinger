@@ -8,7 +8,7 @@ class box {
         this.animator = new Animator(ASSET_MANAGER.getAsset("./Harbor_Assets.png"), 
         this.xStart,this.yStart,width,height,1,1);
     // this.spritesheet = ASSET_MANAGER.getAsset("./Harbor_Assets.png"); 
-        this.bb = new BoundingBox(this.x,this.y,this.width,this.height);
+        this.BB = new BoundingBox(this.x,this.y,this.width,this.height);
         this.size = 3;
     };
 

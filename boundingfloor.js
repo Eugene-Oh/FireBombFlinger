@@ -22,7 +22,7 @@ class boundingfloor {
     };
 
     draw(ctx) { 
-        ctx.strokeRect(0,385,1984,1088);
+        ctx.strokeRect(0,480,1500,20);
     };
 
 

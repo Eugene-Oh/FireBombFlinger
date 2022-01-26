@@ -3,10 +3,11 @@ class Player {
         this.game = game;
 
         this.x = 100;
-        this.crouchedYReduction = 20;
-        this.y = 385;
+        this.crouchedYReduction = 12;
+        this.y = 440; 
+        this.yBound = 440;
         this.velocityX = 0;
-        this.velocityY = 0;
+        this.velocityY = 600;
         this.gravity = 0.01;
         this.gravitySpeed = 0; 
         this.PLAYER_WIDTH = 21;
@@ -18,8 +19,8 @@ class Player {
         // Not shooting = 0, shooting = 1
         this.shooting = 0;
     
-        this.size = 3;
-        this.movementspeed = 2.10;
+        this.size = 2.25;
+        this.movementspeed = 2;
         this.animationspeed = .1
         this.updateBB();
         this.runanimator = new Animator(ASSET_MANAGER.getAsset("./playersprite/run.png"),
@@ -66,7 +67,8 @@ class Player {
       //  this.BB = new BoundingBox(this.x+this.size+2*this.PLAYER_WIDTH,this.y+this.size*this.PLAYER_HEIGHT, this.PLAYER_WIDTH*this.size, this.PLAYER_HEIGHT*this.size); 
     };
 
-    update() {
+    update() { 
+        const TICK = this.gameclockTick;
         // Lateral and idle movements
         if (this.game.keys["a"] && !this.game.keys["d"] && !this.game.keys["s"]) {
             this.velocity = this.movementspeed * -1; 
@@ -83,7 +85,9 @@ class Player {
 
         // Jumping mechanics
         if (this.game.keys["w"] && !this.game.keys["s"]) {
-            this.jumping = 1;
+            this.jumping = 1;  
+            this.y -= this.velocityY*TICK;
+        
         } else if (this.game.keys["s"] && !this.game.keys["w"]) {
             // Crouched mechanics
             if (this.game.keys["a"] && !this.game.keys["d"]) {
@@ -91,7 +95,10 @@ class Player {
             } else if (this.game.keys["d"] && !this.game.keys["a"]) {
                 this.direction = 1;
             }
-            this.jumping = -1;
+            this.jumping = -1; 
+            if(this.y <= this.yBound) { 
+                this.y += this.velocityY *TICK;
+            }
         } else {
             if (this.game.keys["a"] && !this.game.keys["d"]) {
                 this.direction = 0;
@@ -110,10 +117,14 @@ class Player {
   // collision start 
         var that = this; 
         this.game.entities.forEach(function(entity) {  
-              console.log("collided");
-              if(entity.BB && that.BB.collide(entity.BB)) { 
-                  if(that.velocity.y > 0) {  
+              if(entity.BB && that.BB.collide(entity.BB)) {  
+              
+                  if(that.velocity.y > 0) {   
+                      if(entity instanceof box) {  
+                        console.log("collided");
                         that.velocity.y ===0;
+                      }
+                
                   }  
                   if(that.velocity.x > 0) { 
                       that.velocity.x === 0;
