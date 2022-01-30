@@ -8,7 +8,7 @@ class Bullet {
             this.x = this.x - 80;
         }
 		this.maxSpeed = 500;
-        this.removeFromWorld = 0;
+        this.removeFromWorldValue = 0;
 		
 		//this.elapsedTime = 0;
 		
@@ -37,8 +37,9 @@ class Bullet {
 		var that = this;
 		//Collision
 		this.game.entities.forEach(function(entity){
-			if(entity.BB && that.BB.collide(entity.BB)) { 
+			if(entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Bullet)) { 
                 if (entity instanceof Sniper || entity instanceof RPG) {
+                    that.remove();
 					entity.remove();
                 }
             }
@@ -46,13 +47,19 @@ class Bullet {
 		});
 		
 	};
+
+    remove() {
+        this.removeFromWorldValue = 1;
+        this.BB = new BoundingBox(0, 0, 0, 0);
+        this.x = -999;
+        this.y = -999;
+    };
 	
 	draw(ctx){
-        if (this.removeFromWorld == 0) {
+        if (this.removeFromWorldValue == 0) {
             this.animator.drawFrame(this.game.clockTick, ctx, this.x, this.y, 1);
+            ctx.strokeStyle = 'white';    
+            ctx.strokeRect(this.x, this.y, this.width, this.height);
         }
-		ctx.strokeStyle = 'white';    
-    	ctx.strokeRect(this.x, this.y, this.width, this.height);
 	};
-	
 };

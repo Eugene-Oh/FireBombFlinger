@@ -25,6 +25,9 @@ ASSET_MANAGER.queueDownload("./snipersprite/snipershootingreverse.png")
 ASSET_MANAGER.queueDownload("./rpgsprite/rpgshooting.png")
 ASSET_MANAGER.queueDownload("./rpgsprite/rpgshootingreverse.png")
 
+ASSET_MANAGER.queueDownload("./enemydeath/enemydeath.png")
+ASSET_MANAGER.queueDownload("./enemydeath/enemydeathreverse.png")
+
 ASSET_MANAGER.queueDownload("./items-spritesheet/bullet-sprite.png")
 
 ASSET_MANAGER.queueDownload("./Harbor_Assets.png")
