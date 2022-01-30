@@ -2,18 +2,33 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Tohru Animation</title>
-
+    <style>
+        body {
+            font-size: 45px;
+        }
+    </style>
+    <title>Fire Bomb Flinger</title>
     <script type="text/javascript" src="./assetmanager.js"></script>
     <script type="text/javascript" src="./timer.js"></script>
     <script type="text/javascript" src="./gameengine.js"></script>
     <script type="text/javascript" src="./util.js"></script>
     <script type="text/javascript" src="./animator.js"></script>
+    <script type="text/javascript" src="./boundingbox.js"></script>  
     <script type="text/javascript" src="./background.js"></script>
-    <script type="text/javascript" src="./tohru.js"></script>
+    <script type="text/javascript" src="./boundingFloor.js"></script>  
+    <script type="text/javascript" src="./bullet.js"></script> 
+    <script type="text/javascript" src="./box.js"></script> 
+    <script type="text/javascript" src="./player.js"></script>
+    <script type="text/javascript" src="./sniper.js"></script>
+    <script type="text/javascript" src="./rpg.js"></script>
     <script type="text/javascript" src="./main.js"></script>
 </head>
 <body>
     <canvas id="gameWorld" width="1280" height="720" style="background: white; border: 1px solid black"></canvas>
+    <div>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Movement: WASD
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Shooting: /
+    </div>
 </body>
 </html>
