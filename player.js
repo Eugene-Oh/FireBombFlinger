@@ -5,11 +5,13 @@ class Player {
         this.x = 50;
         this.crouchedYReduction = 12;
         this.y = 0;
-        this.yBound= 440;
+        this.yBound= 600;
         this.velocityX = 0;
         this.velocityY = 0;
         this.gravity = 0.04;
-        this.jumpingHeight = 3;
+        this.jumpingHeight = 4;
+
+        this.elapsedTime = 0;
 
         this.PLAYER_WIDTH = 21;
         this.PLAYER_HEIGHT = 34;
@@ -67,7 +69,6 @@ class Player {
     updateBB() { 
         this.lastBB = this.BB;    
         this.BB = new BoundingBox(this.x + this.PLAYER_WIDTH + 10, this.y, this.PLAYER_WIDTH * this.size - 5, this.PLAYER_HEIGHT * this.size - 6);
-      //  this.BB = new BoundingBox(this.x+this.size+2*this.PLAYER_WIDTH,this.y+this.size*this.PLAYER_HEIGHT, this.PLAYER_WIDTH*this.size, this.PLAYER_HEIGHT*this.size); 
     };
 
     update() {
@@ -75,23 +76,23 @@ class Player {
 
         // Lateral and idle movements
         if (this.game.keys["a"] && !this.game.keys["d"] && !this.game.keys["s"]) {
-            this.velocity = this.movementspeed * -1;
+            this.velocityX = this.movementspeed * -1;
             this.direction = 0;
         } else if (this.game.keys["d"] && !this.game.keys["a"] && !this.game.keys["s"]) {
-            this.velocity = this.movementspeed;
+            this.velocityX = this.movementspeed;
             this.direction = 1;
         } else {
-            this.velocity = 0;
+            this.velocityX = 0;
         };
-        this.x += this.velocity;
+        this.x += this.velocityX;
 
         // Jumping mechanics
-        if (this.game.keys["w"] && !this.game.keys["s"] /*&& this.y == this.yBound*/) {
+        if (this.game.keys["w"] && !this.game.keys["s"] && this.velocityY == 0) {
             this.jumping = 1;
             this.velocityY = this.jumpingHeight;
 
         } else if (this.game.keys["s"] && !this.game.keys["w"]) {
-            // Crouched mechanics
+            // Crouched mechdadadanics
             if (this.game.keys["a"] && !this.game.keys["d"]) {
                 this.direction = 0;
             } else if (this.game.keys["d"] && !this.game.keys["a"]) {
@@ -106,14 +107,13 @@ class Player {
             }
             this.jumping = 0;
         }
-        // Y-position and velocity updates
+        // Y-position and velocityX updates
         this.y -= this.velocityY;
-        this.velocityY -= this.gravity; 
-        /*
+        this.velocityY -= this.gravity;
         if (this.y > this.yBound) {
             this.y = this.yBound
             this.velocityY = 0;
-        } */
+        }
          // Shooting mechanics
         if (this.game.keys["/"]) {
             this.shooting = 1;
@@ -122,31 +122,32 @@ class Player {
         }
         // Must update BB after each movement
         this.updateBB();
-        
-        // Collisions
+
+        // Collisions for each entity in the game.
         var that = this; 
         this.game.entities.forEach(function(entity) {
-            if(entity.BB && that.BB.collide(entity.BB)) {  
-                if(that.velocityY <0) { 
-                if(entity instanceof boundingfloor && (that.lastBB.bottom) <= entity.BB.top) { 
-                    console.log("floor Collide");   
-                    that.y = entity.BB.top - that.PLAYER_HEIGHT*that.size+6;
-                  //  that.y = that.yBound;
+            // Can add else-if for specific collisions here.
+            if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player)) { 
+                if (that.lastBB.bottom <= entity.BB.top && that.velocityY < 0) {  
+                    that.yBound = entity.BB.top;
+                    that.y = entity.BB.top - that.BB.height;     
                     that.velocityY = 0;
+                } else if (that.BB.right >= entity.BB.left && that.velocityX >= 0 && (that.lastBB.top < entity.BB.bottom)) {
+                    that.x = entity.BB.left - that.PLAYER_WIDTH*that.size-27;
+                    that.velocityX = 0;
+                } else if (that.BB.left <= entity.BB.right && that.velocityX <= 0 && (that.lastBB.top < entity.BB.bottom)) {
+                    that.x = entity.BB.right - that.PLAYER_WIDTH - 9;
+                    that.velocityX = 0;
+                } else if (that.BB.top <= entity.BB.bottom && that.velocityY >= 0) {
+                    that.y = entity.BB.bottom;
+                    that.velocityY = .01;
                 }
-
-                
-                 if (entity instanceof box && (that.lastBB.bottom) > entity.BB.top && that.lastBB.left< entity.BB.right ) {
-                    console.log("Collision here"); 
-                    that.x = entity.BB.left - that.PLAYER_WIDTH*that.size-25; 
-                    that.velocityX =0;
-                } else if(entity instanceof box && (that.lastBB.bottom) <= entity.BB.top) { 
-                    that.y = entity.BB.bottom; 
-                    that.velocityY = 0;
-                } 
-            } 
-        }
+            // No collision is happening, thus the Y-Bound is changed to default (off the world)
+            } else {
+                that.yBound = 2000;
+            }
         });
+        this.updateBB();
     };
 
     draw(ctx) {
@@ -154,24 +155,24 @@ class Player {
         if (this.jumping == 0) {
             // The player is shooting
             if (this.shooting == 1) {
-                if (this.velocity == this.movementspeed) {
-                    this.runshootinganimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
-                } else if (this.velocity == 0 && this.direction == 1) {
+                if (this.velocityX == this.movementspeed) {
+                    this.runshootinganimator.drawFrame(this.game.clockTick, ctx, this.x-this.game.camera.x, this.y, this.size);
+                } else if (this.velocityX == 0 && this.direction == 1) {
                     this.idleshootinganimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
-                } else if (this.velocity == 0 && this.direction == 0) {
+                } else if (this.velocityX == 0 && this.direction == 0) {
                     this.idleshootingreverseanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
-                } else if (this.velocity == this.movementspeed * -1) {
+                } else if (this.velocityX == this.movementspeed * -1) {
                     this.runshootingreverseanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 }
             // The player is not shooting
             } else {
-                if (this.velocity == this.movementspeed) {
+                if (this.velocityX == this.movementspeed) {
                     this.runanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
-                } else if (this.velocity == 0 && this.direction == 1) {
+                } else if (this.velocityX == 0 && this.direction == 1) {
                     this.idleanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
-                } else if (this.velocity == 0 && this.direction == 0) {
+                } else if (this.velocityX == 0 && this.direction == 0) {
                     this.idleanimatorreverse.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
-                } else if (this.velocity == this.movementspeed * -1) {
+                } else if (this.velocityX == this.movementspeed * -1) {
                     this.runreverseanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 }
             } 
@@ -179,14 +180,14 @@ class Player {
         } else if (this.jumping == 1) {
             // The player is shooting
             if (this.shooting == 1) {
-                if (this.velocity == this.movementspeed || this.velocity == 0 && this.direction == 1) {
+                if (this.velocityX == this.movementspeed || this.velocityX == 0 && this.direction == 1) {
                     this.jumpshootinganimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 } else {
                     this.jumpshootingreverseanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 }
             // The player is not shooting
             } else {
-                if (this.velocity == this.movementspeed || this.velocity == 0 && this.direction == 1) {
+                if (this.velocityX == this.movementspeed || this.velocityX == 0 && this.direction == 1) {
                     this.jumpanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
                 } else {
                     this.jumpreverseanimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
@@ -212,6 +213,6 @@ class Player {
         }
         // To see the bounding box
         ctx.strokeStyle = 'white';
-        ctx.strokeRect(this.x + this.PLAYER_WIDTH + 10, this.y, this.PLAYER_WIDTH * this.size - 5, this.PLAYER_HEIGHT * this.size - 6);
+        ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
     }
 }

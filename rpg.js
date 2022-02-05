@@ -1,26 +1,25 @@
-class Sniper {
-    // Direction 0 = Left, 1 = Right
+class RPG {
     constructor(game, spawnX, spawnY, direction) {
         this.game = game
         this.spawnX = spawnX
         this.spawnY = spawnY
         this.direction = direction
-        this.animationspeed = .1
+        this.animationspeed = .15
         this.size = 2.10
 
-        this.shootinganimator = new Animator(ASSET_MANAGER.getAsset("./snipersprite/snipershooting.png"), 
-        0, 0, 44, 20, 8, this.animationspeed);
-        this.shootingreverseanimator = new Animator(ASSET_MANAGER.getAsset("./snipersprite/snipershootingreverse.png"), 
-        0, 0, 44, 20, 8, this.animationspeed);
+        this.shootinganimator = new Animator(ASSET_MANAGER.getAsset("./rpgsprite/rpgshooting.png"), 
+        0, 0, 44, 27, 5, this.animationspeed);
+        this.shootingreverseanimator = new Animator(ASSET_MANAGER.getAsset("./rpgsprite/rpgshootingreverse.png"), 
+        0, 0, 44, 27, 5, this.animationspeed);
         this.updateBB();
     };
 
     updateBB() { 
         this.lastBB = this.BB;   
         if (this.direction == 1) {
-            this.BB = new BoundingBox(this.spawnX + 22, this.spawnY, 34, 44);
+            this.BB = new BoundingBox(this.spawnX + 25, this.spawnY + 4, 35, 54);
         } else {
-            this.BB = new BoundingBox(this.spawnX + 50, this.spawnY, 34, 44);
+            this.BB = new BoundingBox(this.spawnX + 35, this.spawnY + 6, 35, 54);
         }
     };
 
