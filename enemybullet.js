@@ -1,4 +1,4 @@
-class Bullet {
+class EnemyBullet {
 	constructor(game, xStart, yStart, x, y, width, height, playerTeam, bulletDirection, size, bulletSpeed) {
 		Object.assign(this, {game, xStart, yStart, x, y, width, height, playerTeam, bulletDirection, size, bulletSpeed}); 
 		this.animator = new Animator(ASSET_MANAGER.getAsset("./items-spritesheet/bullet-sprite.png"), 

@@ -38,28 +38,8 @@ ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameWorld");
 	const ctx = canvas.getContext("2d");
 	ctx.imageSmoothingEnabled = false;
-	gameEngine.addEntity(new Player(gameEngine));
-
-	gameEngine.addEntity(new Sniper(gameEngine, 980, 383, 0));
-	gameEngine.addEntity(new Sniper(gameEngine, 375, 0, 1));
-
-    gameEngine.addEntity(new RPG(gameEngine, 1000, 70, 1));
-    gameEngine.addEntity(new RPG(gameEngine, 605, 70, 0));
-
-	gameEngine.addEntity(new box(gameEngine,705,1,384,382,128,127, 1)); 
-    gameEngine.addEntity(new box(gameEngine,705,1,0,446,128,127,.5));  
-	gameEngine.addEntity(new box(gameEngine,705,1,320,446,128,127,.5)); 
-    gameEngine.addEntity(new box(gameEngine,705,1,446,318,128,127,.5)); 
-
-	gameEngine.addEntity(new boundingfloor(gameEngine,0,510,500,10)); 
-	gameEngine.addEntity(new boundingfloor(gameEngine,510,300,1984,10));
-
-	gameEngine.addEntity(new Background(gameEngine));
-
-	//	gameEngine.addEntity(new boundingfloor(gameEngine));
-	//	gameEngine.addEntity(new box(gameEngine,100,150,832,896,128,128));
-
+	scene = new SceneManager(gameEngine);
+	gameEngine.addEntity(scene);
 	gameEngine.init(ctx);
-
 	gameEngine.start();
 });
