@@ -18,7 +18,7 @@ ASSET_MANAGER.queueDownload("./playersprite/idle.png")
 ASSET_MANAGER.queueDownload("./playersprite/idlereverse.png")
 ASSET_MANAGER.queueDownload("./playersprite/idleshoot.png")
 ASSET_MANAGER.queueDownload("./playersprite/idleshootreverse.png")
-
+ASSET_MANAGER.queueDownload("./rope.png")
 ASSET_MANAGER.queueDownload("./snipersprite/snipershooting.png")
 ASSET_MANAGER.queueDownload("./snipersprite/snipershootingreverse.png")
 

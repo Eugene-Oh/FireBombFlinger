@@ -27,8 +27,9 @@ class Player {
         // Not shooting = 0, shooting = 1
         this.shooting = 0;
 
-        this.size = 2.25;
-        this.movementspeed = 1.5;
+        this.size = 2.25; 
+        this.movementspeed = 3;
+       // this.movementspeed = 1.5;
         this.animationspeed = .1
 
         this.runanimator = new Animator(ASSET_MANAGER.getAsset("./playersprite/run.png"),
@@ -141,7 +142,7 @@ class Player {
         this.game.entities.forEach(function(entity) {
             // Collisions with other enemies and strucutres.
             if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && !(entity instanceof Bullet) && 
-                !(entity instanceof EnemyBullet)) { 
+                !(entity instanceof EnemyBullet) && !(entity instanceof rope)) { 
                 if (that.lastBB.bottom <= entity.BB.top && that.velocityY < 0) {  
                     that.yBound = entity.BB.top;
                     that.y = entity.BB.top - that.BB.height;     
@@ -160,9 +161,36 @@ class Player {
             } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof EnemyBullet) {
                 entity.remove();
                 that.health -= 1;
-            } else {
-                that.yBound = 2000;
+            } else if(entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && (entity instanceof rope)) {  
+                that.yBound = entity.BB.top;
+              //  that.velocityY +=that.gravity;  
+                if(that.game.keys["f"]) {   
+
+                    that.velocityY =that.gravity;   
+                    that.y += that.velocityY;
+                    
+                if(that.game.keys["w"]) { 
+                    that.y-=1.5;   
+                   // that.velocityY +=gravity;  
+                }  
+                else if (that.game.keys["s"] && that.BB.bottom <= entity.BB.bottom) {  
+                    
+                    that.y+=1.5;   
+                    /* 
+                    if (that.y > that.yBound) {
+                        that.y = that.yBound
+                        that.velocityY = 0;
+                    } */
+                } 
             }
+                //else if(that.game.keys["s"]) { 
+                //    that.velocityY-=5;
+                //} 
+            }  
+            else {
+                that.yBound = 2000;
+            } 
+            
         });
         that.updateBB();
     };

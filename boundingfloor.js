@@ -13,7 +13,8 @@ class boundingfloor {
         this.BB = new BoundingBox(this.x - this.game.camera.x,this.y,this.width,this.height);
     };
 
-    draw(ctx) {  
+    draw(ctx) {   
+        ctx.strokeStyle = 'red';
         ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
        // ctx.strokeRect(0,510,1984,20);
     };

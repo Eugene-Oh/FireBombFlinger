@@ -29,9 +29,15 @@ class SceneManager {
         gameEngine.addEntity(new box(gameEngine,705,1,446,318,128,127,.5)); 
     
         gameEngine.addEntity(new boundingfloor(gameEngine,0,510,500,10)); 
-        gameEngine.addEntity(new boundingfloor(gameEngine,510,300,800,10));
-    
-        gameEngine.addEntity(new Background(gameEngine));
+        gameEngine.addEntity(new boundingfloor(gameEngine,510,300,800,10)); 
+        gameEngine.addEntity(new boundingfloor(gameEngine,1312,301,1000,10));
+        gameEngine.addEntity(new rope(gameEngine,245,416,250,280,12,95,2)); 
+        gameEngine.addEntity(new rope(gameEngine,245,416,2500,280,12,95,2)); 
+        gameEngine.addEntity(new rope(gameEngine,245,416,2800,200,12,15,2)); 
+        gameEngine.addEntity(new rope(gameEngine,245,416,3300,600,12,15,2)); 
+        gameEngine.addEntity(new rope(gameEngine,245,416,3800,500,12,30,2)); 
+        gameEngine.addEntity(new boundingfloor(gameEngine,3900,550,1000,50));
+        gameEngine.addEntity(new Background(gameEngine)); 
     };
 
     gameLoss() {
