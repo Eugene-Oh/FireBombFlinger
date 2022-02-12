@@ -1,4 +1,4 @@
-class Bullet {
+class EnemyBullet {
 	constructor(game, x, y, playerTeam, bulletDirection, size, bulletSpeed) {
 		Object.assign(this, {game, x, y, playerTeam, bulletDirection, size, bulletSpeed}); 
         this.width = 13;
@@ -22,7 +22,7 @@ class Bullet {
     };
 	
 	update(){
-        if (this.x - this.game.camera.x < 0 || this.x - this.game.camera.x > 1280) {
+        if (this.x - this.game.camera.x < -1000 || this.x - this.game.camera.x > 2280) {
             this.remove();
         }
         if (this.bulletDirection == 1) {
@@ -34,7 +34,7 @@ class Bullet {
 		var that = this;
 		//Collision
 		this.game.entities.forEach(function(entity){
-			if(entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Bullet)) { 
+			if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Bullet)) { 
                 if (entity instanceof Sniper || entity instanceof RPG) {
                     that.remove();
 					entity.remove();

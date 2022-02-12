@@ -1,5 +1,8 @@
 /** Global Parameters Object */
-const params = { };
+const params = {
+    debug: false,
+    canvas_width: 1280
+};
 
 /**
  * @param {Number} n

@@ -26,14 +26,16 @@ class RPG {
     updateBB() { 
         this.lastBB = this.BB;   
         if (this.direction == 1) {
-            this.BB = new BoundingBox(this.spawnX + 25, this.spawnY + 4, 35, 54);
+            this.BB = new BoundingBox(this.spawnX + 25 - this.game.camera.x, this.spawnY + 4, 35, 54);
         } else {
-            this.BB = new BoundingBox(this.spawnX + 35, this.spawnY + 6, 35, 54);
+            this.BB = new BoundingBox(this.spawnX + 35 - this.game.camera.x, this.spawnY + 6, 35, 54);
         }
     };
 
     update() {
-
+        if (this.removeFromWorldValue != 1) {
+            this.updateBB();
+        }
     };
 
     remove() {
@@ -44,18 +46,20 @@ class RPG {
     draw(ctx) {
         if (this.removeFromWorldValue == 0) {
             if (this.direction == 1) {
-                this.shootinganimator.drawFrame(this.game.clockTick, ctx, this.spawnX, this.spawnY, this.size);
+                this.shootinganimator.drawFrame(this.game.clockTick, ctx, this.spawnX - this.game.camera.x, this.spawnY, this.size);
             } else {
-                this.shootingreverseanimator.drawFrame(this.game.clockTick, ctx, this.spawnX, this.spawnY, this.size);
+                this.shootingreverseanimator.drawFrame(this.game.clockTick, ctx, this.spawnX - this.game.camera.x, this.spawnY, this.size);
             }
             // To see the bounding box
-            ctx.strokeStyle = 'white';
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            if (params.debug) {
+                ctx.strokeStyle = 'white';
+                ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            }
         } else if (this.removeFromWorldValue == 1 && this.deathCounter <= this.deathMaxCounter) {
             if (this.direction == 1) {
-                this.deathanimator.drawFrame(this.game.clockTick, ctx, this.spawnX, this.spawnY + 12, this.size)             
+                this.deathanimator.drawFrame(this.game.clockTick, ctx, this.spawnX - this.game.camera.x, this.spawnY + 12, this.size)             
             } else {
-                this.deathanimatorreverse.drawFrame(this.game.clockTick, ctx, this.spawnX, this.spawnY + 12, this.size)
+                this.deathanimatorreverse.drawFrame(this.game.clockTick, ctx, this.spawnX - this.game.camera.x, this.spawnY + 12, this.size)
             }
             this.deathCounter += .025;
         }
