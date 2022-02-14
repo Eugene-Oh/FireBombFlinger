@@ -44,4 +44,3 @@ class AssetManager {
         return this.cache[path];
     };
 };
-

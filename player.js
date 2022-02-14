@@ -158,6 +158,35 @@ class Player {
             } else {
                 this.shooting = 0;
             }
+
+			//Shooting bullet on mouse click
+			if (this.game.click && this.game.shoot == true) {
+				if (this.elapsedTime > this.fireRate) {
+				
+				const target = { x: this.game.mouse.x, y: this.game.mouse.y};
+				
+				if (this.jumping == -1) {
+	                this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 20, true, 2.5, 1000, target));
+	            } else {
+					
+	                this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true, 2.5, 1000, target));
+	            }
+	            this.elapsedTime = 0;
+				
+			} 
+				this.game.shoot = false;
+				
+			} else if (this.game.mouseup) {
+				this.shooting = 0;
+			}
+			
+			if (this.game.click && this.game.shoot == true) {
+				this.shooting = 1;	
+			} else if (this.game.mouseup) {
+				this.shooting = 0;
+			}
+
+
             // Must update BB after each movement
             this.updateBB();
     
