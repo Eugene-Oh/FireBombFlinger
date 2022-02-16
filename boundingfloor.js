@@ -14,7 +14,9 @@ class boundingfloor {
     };
 
     draw(ctx) {  
-        if (params.debug) {
+        if (params.debug) { 
+           
+            ctx.strokeStyle = 'red';
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
         }
        // ctx.strokeRect(0,510,1984,20);

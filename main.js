@@ -37,7 +37,7 @@ ASSET_MANAGER.queueDownload("./rope.png")
 ASSET_MANAGER.queueDownload("./Harbor_Assets.png")
 
 ASSET_MANAGER.queueDownload("./backgrounds/harbor.png")
-
+ASSET_MANAGER.queueDownload("./harborLevel2.png")
 ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameWorld");
 	const ctx = canvas.getContext("2d");

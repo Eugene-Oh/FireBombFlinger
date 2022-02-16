@@ -20,7 +20,7 @@ class rope {
         this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.size);   
         //   ctx.drawImage(this.spritesheet,this.xStart,this.yStart,this.width,this.height,this.x,this.y,this.width*this.size,this.height*this.size); 
         if (params.debug) {
-            ctx.strokeStyle = 'white';    
+            ctx.strokeStyle = 'red';    
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
         }
     };

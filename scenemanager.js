@@ -29,19 +29,72 @@ class SceneManager {
         gameEngine.addEntity(new box(gameEngine,705,1,0,446,128,127,.5));  
         gameEngine.addEntity(new box(gameEngine,705,1,320,446,128,127,.5)); 
         gameEngine.addEntity(new box(gameEngine,705,1,446,318,128,127,.5)); 
-    
+        gameEngine.addEntity(new box(gameEngine,705,1,1100,350,128,127,.6)); 
         gameEngine.addEntity(new boundingfloor(gameEngine,0,510,500,10)); 
         gameEngine.addEntity(new boundingfloor(gameEngine,510,300,800,10));
 
-        gameEngine.addEntity(new boundingfloor(gameEngine,1312,301,1000,10));
-        gameEngine.addEntity(new rope(gameEngine,245,416,250,280,12,95,2)); 
+        gameEngine.addEntity(new boundingfloor(gameEngine,1312,301,1000,10)); 
+        gameEngine.addEntity(new rope(gameEngine,245,416,250,280,12,95,2));   
+           //portion 3 ropes and  final area 
+         // first rope of of portion  3 
         gameEngine.addEntity(new rope(gameEngine,245,416,2500,280,12,95,2)); 
+
+       
         gameEngine.addEntity(new rope(gameEngine,245,416,2800,200,12,15,2)); 
         gameEngine.addEntity(new rope(gameEngine,245,416,3300,600,12,15,2)); 
-        gameEngine.addEntity(new rope(gameEngine,245,416,3800,500,12,30,2)); 
-        gameEngine.addEntity(new boundingfloor(gameEngine,3900,550,1000,50));
-        gameEngine.addEntity(new Background(gameEngine)); 
-    
+        gameEngine.addEntity(new rope(gameEngine,245,416,3600,500,12,60,2)); 
+        gameEngine.addEntity(new box(gameEngine,705,1,3700,380,128,127,0.5));   
+        gameEngine.addEntity(new box(gameEngine,705,1,3695,355,128,127,0.20));   
+        gameEngine.addEntity(new Sniper(gameEngine, 3670, 337, 0)); 
+        gameEngine.addEntity(new BackgroundDynamic(gameEngine,128,768,100,320,4300,510,0.665));  
+        gameEngine.addEntity(new Sniper(gameEngine, 4250, 470, 0)); 
+        gameEngine.addEntity(new rope(gameEngine,245,416,3850,500,12,60,2));  
+        gameEngine.addEntity(new rope(gameEngine,245,416,3850,150,12,60,2));  
+        gameEngine.addEntity(new BackgroundDynamic(gameEngine,768,448,450,700,3950,300,0.665)); 
+       // gameEngine.addEntity(new BackgroundDynamic(gameEngine,128,768,67,320,3700,510,0.665)); 
+        gameEngine.addEntity(new crane(gameEngine,320,0,3700,420,63,127,1)); 
+        gameEngine.addEntity(new crane(gameEngine,320,0,3700,548,63,90,1));
+        gameEngine.addEntity(new boundingfloor(gameEngine,3950,300,300,10));
+        gameEngine.addEntity(new boundingfloor(gameEngine,0,0,10,600));
+        gameEngine.addEntity(new Background(gameEngine));   
+        var c = 100;
+        gameEngine.addEntity(new emptybackground(gameEngine,208,32,2500,115,175,175,2.5)); 
+        gameEngine.addEntity(new emptybackground(gameEngine,160,208,2500,542,31,63,3)); 
+        gameEngine.addEntity(new emptybackground(gameEngine,112,0,2500,0,63,32,4));    
+
+        //cityscape
+        gameEngine.addEntity(new emptybackground(gameEngine,208,32,2500+c+300,115,175,175,2.5));     
+        for( var j = 1; j<6; j++) { 
+            gameEngine.addEntity(new emptybackground(gameEngine,208,32,2500+j*c+300*j,115,175,175,2.5)); 
+        } 
+
+        gameEngine.addEntity(new emptybackground(gameEngine,208,32,2500+2*c+300*2,115,175,175,2.5)); 
+        //water  
+        gameEngine.addEntity(new emptybackground(gameEngine,160,208,2500+c-10,542,31,63,3)); 
+        for(var i = 1; i< 30; i ++) {   
+        gameEngine.addEntity(new emptybackground(gameEngine,160,208,2500+i*c-10*i,542,31,63,3));   
+        }
+        // nightsky
+        gameEngine.addEntity(new emptybackground(gameEngine,112,0,2500+c+150,0,63,32,4)); 
+        for(var k = 1; k<10; k++) { 
+            gameEngine.addEntity(new emptybackground(gameEngine,112,0,2500+k*c+150*k,0,63,32,4)); 
+        } 
+
+        // left part of the map so that it's not a blank screen
+        gameEngine.addEntity(new emptybackground(gameEngine,208,32,-430,115,175,175,2.5)); 
+        gameEngine.addEntity(new emptybackground(gameEngine,208,32,-660,115,175,175,2.5));  
+        gameEngine.addEntity(new emptybackground(gameEngine,160,208,-90,542,31,63,3)); 
+        gameEngine.addEntity(new emptybackground(gameEngine,160,208,-180,542,31,63,3));  
+        gameEngine.addEntity(new emptybackground(gameEngine,160,208,-260,542,31,63,3));  
+        gameEngine.addEntity(new emptybackground(gameEngine,160,208,-350,542,31,63,3)); 
+        gameEngine.addEntity(new emptybackground(gameEngine,160,208,-440,542,31,63,3)); 
+        gameEngine.addEntity(new emptybackground(gameEngine,160,208,-530,542,31,63,3)); 
+        gameEngine.addEntity(new emptybackground(gameEngine,160,208,-620,542,31,63,3)); 
+        gameEngine.addEntity(new emptybackground(gameEngine,160,208,-700,542,31,63,3));  
+
+        gameEngine.addEntity(new emptybackground(gameEngine,112,0,-420,0,63,32,4)); 
+        gameEngine.addEntity(new emptybackground(gameEngine,112,0,-220,0,63,32,4)); 
+        gameEngine.addEntity(new emptybackground(gameEngine,112,0,-660,0,63,32,4));
         gameEngine.addEntity(new Background(gameEngine));
     };
 

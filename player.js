@@ -28,8 +28,9 @@ class Player {
         // Not shooting = 0, shooting = 1
         this.shooting = 0;
 
-        this.size = 2.25;
-        this.movementspeed = 1.5;
+        this.size = 2.25; 
+        this.movementspeed = 5;
+      //  this.movementspeed = 2.0;
         this.animationspeed = .1
 
         this.deathMaxCounter = 4;
@@ -108,7 +109,7 @@ class Player {
             this.x += this.velocityX;
     
             // Jumping mechanics
-            if (this.game.keys["w"] && !this.game.keys["s"] && this.velocityY == 0) {
+            if (this.game.keys["w"] && !this.game.keys["s"] /*&& this.velocityY == 0*/ ) {
                 this.jumping = 1;
                 this.velocityY = this.jumpingHeight;
     
@@ -158,6 +159,35 @@ class Player {
             } else {
                 this.shooting = 0;
             }
+
+			//Shooting bullet on mouse click
+			if (this.game.click && this.game.shoot == true) {
+				if (this.elapsedTime > this.fireRate) {
+				
+				const target = { x: this.game.mouse.x, y: this.game.mouse.y};
+				
+				if (this.jumping == -1) {
+	                this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 20, true, 2.5, 1000, target));
+	            } else {
+					
+	                this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true, 2.5, 1000, target));
+	            }
+	            this.elapsedTime = 0;
+				
+			} 
+				this.game.shoot = false;
+				
+			} else if (this.game.mouseup) {
+				this.shooting = 0;
+			}
+			
+			if (this.game.click && this.game.shoot == true) {
+				this.shooting = 1;	
+			} else if (this.game.mouseup) {
+				this.shooting = 0;
+			}
+
+
             // Must update BB after each movement
             this.updateBB();
     
@@ -186,11 +216,11 @@ class Player {
                     entity.remove();
                     that.health -= 1;
                 } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && (entity instanceof rope)) {
-                    that.yBound = entity.BB.top;
+                    that.yBound = entity.BB.bottom;
                     //  that.velocityY +=that.gravity;  
-                      if (that.game.keys["n"]) {   
+                      if (that.game.keys["x"]) {   
       
-                          that.velocityY =that.gravity;   
+                         that.velocityY =that.gravity;   
                           that.y += that.velocityY;
                       
                       if (that.game.keys["w"]) { 
@@ -204,7 +234,12 @@ class Player {
                               that.y = that.yBound
                               that.velocityY = 0;
                           } */
-                      } 
+                      }   
+                      /*
+                       if(that.game.keys["v"]) { 
+                          that.jumping = 1; 
+                          that.velocitY = that.jumpHeight;
+                      } */
                     }
                 } else {
                     that.yBound = 2000;

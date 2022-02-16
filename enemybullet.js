@@ -38,6 +38,8 @@ class EnemyBullet {
                 if (entity instanceof Sniper || entity instanceof RPG) {
                     that.remove();
 					entity.remove();
+                }else if(entity instanceof box) { 
+                    that.remove();
                 }
             }
 		});
