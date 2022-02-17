@@ -2,10 +2,12 @@ class Player {
     constructor(game) {
         this.game = game;
 
-        this.totalHealth = 99999;
+        this.totalHealth = 50;
         this.health = this.totalHealth;
         
-        this.x = 50;
+        this.gamewon = false;
+
+        this.x = 20;
         this.crouchedYReduction = 12;
         this.y = 0;
         this.yBound= 600;
@@ -15,8 +17,10 @@ class Player {
         this.jumpingHeight = 4;
 
         this.elapsedTime = 0;
+        this.elapsedTimeWalk = 0;
+        this.walkSoundRate = .4
         this.elapsedDeathTime = 0;
-        this.fireRate = .2;
+        this.fireRate = .30;
 
         this.PLAYER_WIDTH = 21;
         this.PLAYER_HEIGHT = 34;
@@ -29,7 +33,7 @@ class Player {
         this.shooting = 0;
 
         this.size = 2.25;
-        this.movementspeed = 1.5;
+        this.movementspeed = 2;
         this.animationspeed = .1
 
         this.deathMaxCounter = 4;
@@ -91,15 +95,25 @@ class Player {
     update() {
         const TICK = this.game.clockTick;
         this.elapsedTime += TICK;
+        this.elapsedTimeWalk += TICK;
         // Lateral and idle movements
         if (this.y > 720) {
             this.health = 0;
         }
         if (this.health > 0) {
             if (this.game.keys["a"] && !this.game.keys["d"] && !this.game.keys["s"]) {
+                if (this.elapsedTimeWalk > this.walkSoundRate) {
+                    ASSET_MANAGER.playAsset("./sounds/player/Walk.wav")
+                    this.elapsedTimeWalk = 0;
+                    
+                }
                 this.velocityX = this.movementspeed * -1;
                 this.direction = 0;
             } else if (this.game.keys["d"] && !this.game.keys["a"] && !this.game.keys["s"]) {
+                if (this.elapsedTimeWalk > this.walkSoundRate) {
+                    ASSET_MANAGER.playAsset("./sounds/player/Walk.wav")
+                    this.elapsedTimeWalk = 0;
+                }
                 this.velocityX = this.movementspeed;
                 this.direction = 1;
             } else {
@@ -109,6 +123,7 @@ class Player {
     
             // Jumping mechanics
             if (this.game.keys["w"] && !this.game.keys["s"] && this.velocityY == 0) {
+                ASSET_MANAGER.playAsset("./sounds/player/Jump.wav")
                 this.jumping = 1;
                 this.velocityY = this.jumpingHeight;
     
@@ -137,20 +152,22 @@ class Player {
             }
              // Shooting mechanics
             if (this.game.keys["m"] && this.elapsedTime > this.fireRate) {
+                const target = { x: this.x, y: this.y};
                 if (this.jumping == -1) {
                     if (this.direction == 1) {
-                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 20, true, this.direction, 2.5, 1000));
+                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 20, true, 2.5, 1000, target));
                     } else {
-                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 20, true, this.direction, 2.5, 1000));
+                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 20, true, 2.5, 1000, target));
                     }
                     
                 } else {
                     if (this.direction == 1) {
-                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 18, true, this.direction, 2.5, 1000));
+                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 18, true,  2.5, 1000, target));
                     } else {
-                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true, this.direction, 2.5, 1000));
+                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true,  2.5, 1000, target));
                     }
                 }
+                ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
                 this.elapsedTime = 0;
             } 
             if (this.game.keys["m"]) {
@@ -158,6 +175,34 @@ class Player {
             } else {
                 this.shooting = 0;
             }
+
+            //Shooting bullet on mouse click
+            if (this.game.click && this.game.shoot == true) {
+				if (this.elapsedTime > this.fireRate) {
+				
+				const target = { x: this.game.mouse.x + this.game.camera.x, y: this.game.mouse.y};
+				
+				if (this.jumping == -1) {
+	                this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 20, true, 2.5, 1000, target));
+	            } else {
+					
+	                this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true, 2.5, 1000, target));
+	            }
+	            this.elapsedTime = 0;
+				
+			} 
+				this.game.shoot = false;
+				
+			} else if (this.game.mouseup) {
+				this.shooting = 0;
+			}
+			
+			if (this.game.click && this.game.shoot == true) {
+				this.shooting = 1;	
+			} else if (this.game.mouseup) {
+				this.shooting = 0;
+			}
+
             // Must update BB after each movement
             this.updateBB();
     
@@ -166,7 +211,7 @@ class Player {
             this.game.entities.forEach(function(entity) {
                 // Collisions with other enemies and strucutres.
                 if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && !(entity instanceof Bullet) && 
-                    !(entity instanceof EnemyBullet) && !(entity instanceof rope)) { 
+                    !(entity instanceof EnemyBullet) && !(entity instanceof rope) && !(entity instanceof Explosion) && !(entity instanceof Rocket) && !(entity instanceof pot)) { 
                     if (that.lastBB.bottom <= entity.BB.top && that.velocityY < 0) {  
                         that.yBound = entity.BB.top;
                         that.y = entity.BB.top - that.BB.height;     
@@ -184,21 +229,26 @@ class Player {
                 // Collisions with bullets.
                 } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof EnemyBullet) {
                     entity.remove();
-                    that.health -= 1;
+                    ASSET_MANAGER.playAsset("./sounds/player/Hurt.wav")
+                    that.health -= 2;
+                } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof Explosion && entity.damageDone == false) {
+                    that.health -= 5;
+                    ASSET_MANAGER.playAsset("./sounds/player/Hurt.wav")
+                    entity.damageDone = true
                 } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && (entity instanceof rope)) {
                     that.yBound = entity.BB.top;
                     //  that.velocityY +=that.gravity;  
-                      if (that.game.keys["n"]) {   
+                      if (that.game.keys["b"]) {   
       
                           that.velocityY =that.gravity;   
                           that.y += that.velocityY;
                       
                       if (that.game.keys["w"]) { 
-                          that.y-=1.5;   
+                          that.y-=1;   
                          // that.velocityY +=gravity;  
                       } else if (that.game.keys["s"] && that.BB.bottom <= entity.BB.bottom) {  
       
-                          that.y+=1.5;   
+                          that.y+=1;   
                           /* 
                           if (that.y > that.yBound) {
                               that.y = that.yBound
@@ -206,13 +256,16 @@ class Player {
                           } */
                       } 
                     }
+                } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof pot) {
+                    that.gamewon = true;
                 } else {
                     that.yBound = 2000;
                 }
             });
             that.updateBB();
         }
-        if (this.health == 0) {
+        if (this.health <= 0) {
+            this.health = 0;
             this.elapsedDeathTime += TICK;
         }
     };

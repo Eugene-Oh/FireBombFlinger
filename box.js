@@ -24,3 +24,30 @@ class box {
         }
     };
 }
+
+class crane { 
+    constructor(game,xStart,yStart,x,y, width, height, size) {    
+        Object.assign(this, {game,xStart,yStart,x,y,width,height,size}); 
+        this.animator = new Animator(ASSET_MANAGER.getAsset("./Harbor_Assets.png"), 
+        this.xStart,this.yStart,width,height,1,1);
+    // this.spritesheet = ASSET_MANAGER.getAsset("./Harbor_Assets.png"); 
+        
+    };
+
+    update() { 
+
+    };
+
+    updateBB() {
+       // this.BB = new BoundingBox(this.x - this.game.camera.x,this.y,this.width * this.size,this.height * this.size);
+    };
+    remove() { 
+
+    };
+    draw(ctx) { 
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.size);   
+        //   ctx.drawImage(this.spritesheet,this.xStart,this.yStart,this.width,this.height,this.x,this.y,this.width*this.size,this.height*this.size); 
+
+    };
+
+}
