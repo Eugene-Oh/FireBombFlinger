@@ -13,7 +13,10 @@ class GameEngine {
         this.click = null;
         this.mouse = null;
         this.wheel = null;
+
         this.keys = {};
+
+		this.shoot = null; //left click
 
         // THE KILL SWITCH
         this.running = false;
@@ -63,6 +66,7 @@ class GameEngine {
                 console.log("CLICK", getXandY(e));
             }
             this.click = getXandY(e);
+			this.shoot = true;
         });
 
         this.ctx.canvas.addEventListener("wheel", e => {
@@ -75,14 +79,38 @@ class GameEngine {
             this.wheel = e;
         });
 
-        this.ctx.canvas.addEventListener("contextmenu", e => {
-            if (this.options.debugging) {
-                console.log("RIGHT_CLICK", getXandY(e));
+		this.ctx.canvas.addEventListener("mouseup", e => {
+			//if (this.options.debugging) {
+				console.log("CLICK", getXandY(e));
+			//}
+			this.click = 0;
+			this.shoot = false;
+			
+			switch (e.which) {
+                case 1:
+                    //alert('Left Mouse button release.');
+                    break;
+                case 2:
+                    //alert('Middle Mouse button release.');
+                    break;
+                case 3:
+                    //alert('Right Mouse button release.');
+                    break;
+
             }
+			
+		});
+		
+
+        this.ctx.canvas.addEventListener("contextmenu", e => {
+            //if (this.options.debugging) {
+                console.log("RIGHT_CLICK", getXandY(e));
+            //}
             if (this.options.prevent.contextMenu) {
                 e.preventDefault(); // Prevent Context Menu
             }
             this.rightclick = getXandY(e);
+			this.shoot = false;
         });
 
         window.addEventListener("keydown", event => this.keys[event.key] = true);
