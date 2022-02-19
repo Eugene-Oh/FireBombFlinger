@@ -7,7 +7,7 @@ class Player {
         
         this.gamewon = false;
 
-        this.x = 20;
+        this.x = 55;
         this.crouchedYReduction = 12;
         this.y = 0;
         this.yBound= 600;
