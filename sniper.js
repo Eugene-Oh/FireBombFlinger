@@ -9,6 +9,8 @@ class Sniper {
         this.deathanimationspeed = .15
         this.size = 2.10
 
+        this.health = 1;
+
         this.fireRate = 1;
         this.elapsedTime = 2
         this.bulletSpeed = 750;
@@ -60,9 +62,14 @@ class Sniper {
     };
 
     remove() {
-        ASSET_MANAGER.playAsset("./sounds/enemies/Die.mp3")
-        this.removeFromWorldValue = 1;
-        this.BB = new BoundingBox(0, 0, 0, 0);
+        if (this.health == 0) {
+            ASSET_MANAGER.playAsset("./sounds/enemies/Die.mp3")
+            this.removeFromWorldValue = 1;
+            this.BB = new BoundingBox(0, 0, 0, 0);
+        } else {
+            ASSET_MANAGER.playAsset("./sounds/enemies/Hurt.wav")
+            this.health -= 1
+        }
     };
 
     draw(ctx) {

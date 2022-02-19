@@ -150,50 +150,47 @@ class Player {
                 this.y = this.yBound
                 this.velocityY = 0;
             }
-             // Shooting mechanics
-            if (this.game.keys["m"] && this.elapsedTime > this.fireRate) {
-                const target = { x: this.x, y: this.y};
-                if (this.jumping == -1) {
-                    if (this.direction == 1) {
-                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 20, true, 2.5, 1000, target));
-                    } else {
-                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 20, true, 2.5, 1000, target));
-                    }
+             // Shooting mechanics for keyboard
+            // if (this.game.keys["m"] && this.elapsedTime > this.fireRate) {
+            //     const target = { x: this.x, y: this.y};
+            //     if (this.jumping == -1) {
+            //         if (this.direction == 1) {
+            //             this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 20, true, 2.5, 1000, target));
+            //         } else {
+            //             this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 20, true, 2.5, 1000, target));
+            //         }
                     
-                } else {
-                    if (this.direction == 1) {
-                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 18, true,  2.5, 1000, target));
-                    } else {
-                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true,  2.5, 1000, target));
-                    }
-                }
-                ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
-                this.elapsedTime = 0;
-            } 
-            if (this.game.keys["m"]) {
-                this.shooting = 1;
-            } else {
-                this.shooting = 0;
-            }
+            //     } else {
+            //         if (this.direction == 1) {
+            //             this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 18, true,  2.5, 1000, target));
+            //         } else {
+            //             this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true,  2.5, 1000, target));
+            //         }
+            //     }
+            //     ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
+            //     this.elapsedTime = 0;
+            // } 
 
-            //Shooting bullet on mouse click
-            if (this.game.click && this.game.shoot == true) {
+            this.shooting = 0;
+            // Shooting bullets on mouse click
+            if (this.game.click && this.game.shoot == true && this.elapsedTime > this.fireRate) {
+                ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
 				if (this.elapsedTime > this.fireRate) {
 				
 				const target = { x: this.game.mouse.x + this.game.camera.x, y: this.game.mouse.y};
 				
 				if (this.jumping == -1) {
-	                this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 20, true, 2.5, 1000, target));
+	                this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 20, true, 1.5, 1000, target));
 	            } else {
 					
-	                this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true, 2.5, 1000, target));
+	                this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true, 1.5, 1000, target));
 	            }
 	            this.elapsedTime = 0;
 				
 			} 
 				this.game.shoot = false;
 				
-			} else if (this.game.mouseup) {
+			} else if (this.game.click) {
 				this.shooting = 0;
 			}
 			
@@ -265,6 +262,7 @@ class Player {
             that.updateBB();
         }
         if (this.health <= 0) {
+            ASSET_MANAGER.pauseBackgroundMusic();
             this.health = 0;
             this.elapsedDeathTime += TICK;
         }

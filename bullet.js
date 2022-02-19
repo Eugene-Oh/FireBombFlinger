@@ -2,9 +2,9 @@ class Bullet {
 	
 	constructor(game, x, y, playerTeam, size, bulletSpeed, target) {
 		Object.assign(this, {game, x, y, playerTeam, size, bulletSpeed, target}); 
-		this.width = 13;
-		this.height = 6;
-		this.animator = new Animator(ASSET_MANAGER.getAsset("./items-spritesheet/bullet-sprite.png"), 
+		this.width = 10;
+		this.height = 10;
+		this.animator = new Animator(ASSET_MANAGER.getAsset("./items-spritesheet/player-bullet.png"), 
 		0, 0, this.width, this.height, 1, 0.2);
 		/*
 		if (this.bulletDirection == 0) {

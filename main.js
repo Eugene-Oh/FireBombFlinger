@@ -34,7 +34,8 @@ ASSET_MANAGER.queueDownload("./rpgsprite/rpgshootingreverse.png")
 ASSET_MANAGER.queueDownload("./enemydeath/enemydeath.png")
 ASSET_MANAGER.queueDownload("./enemydeath/enemydeathreverse.png")
 
-ASSET_MANAGER.queueDownload("./items-spritesheet/bullet-sprite.png")
+ASSET_MANAGER.queueDownload("./items-spritesheet/enemy-bullet.png")
+ASSET_MANAGER.queueDownload("./items-spritesheet/player-bullet.png")
 ASSET_MANAGER.queueDownload("./items-spritesheet/rocket.png")
 ASSET_MANAGER.queueDownload("./items-spritesheet/explosion.png")
 ASSET_MANAGER.queueDownload("./items-spritesheet/pot.png")
@@ -49,6 +50,7 @@ ASSET_MANAGER.queueDownload("./backgrounds/offmap.png")
 ASSET_MANAGER.queueDownload("./sounds/enemies/RocketExplosion.wav")
 ASSET_MANAGER.queueDownload("./sounds/enemies/Snipershoot.mp3")
 ASSET_MANAGER.queueDownload("./sounds/enemies/Die.mp3")
+ASSET_MANAGER.queueDownload("./sounds/enemies/Hurt.wav")
 
 ASSET_MANAGER.queueDownload("./sounds/player/Jump.wav")
 ASSET_MANAGER.queueDownload("./sounds/player/Shoot.wav")
@@ -58,6 +60,8 @@ ASSET_MANAGER.queueDownload("./sounds/player/Walk.wav")
 ASSET_MANAGER.queueDownload("./sounds/background/DynamicFight_3.mp3")
 
 ASSET_MANAGER.queueDownload("./sounds/game/Gameloss.mp3")
+ASSET_MANAGER.queueDownload("./sounds/game/Gamewin.wav")
+
 ASSET_MANAGER.queueDownload("./harborLevel2.png")
 
 ASSET_MANAGER.downloadAll(() => {

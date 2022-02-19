@@ -8,6 +8,8 @@ class RPG {
         this.deathanimationspeed = .15
         this.size = 2.10
 
+        this.health = 2;
+
         this.fireRate = 1;
         this.elapsedTime = .5;
         this.bulletSpeed = 425;
@@ -58,9 +60,14 @@ class RPG {
     };
 
     remove() {
-        ASSET_MANAGER.playAsset("./sounds/enemies/Die.mp3")
-        this.removeFromWorldValue = 1;
-        this.BB = new BoundingBox(0, 0, 0, 0);
+        if (this.health == 0) {
+            ASSET_MANAGER.playAsset("./sounds/enemies/Die.mp3")
+            this.removeFromWorldValue = 1;
+            this.BB = new BoundingBox(0, 0, 0, 0);
+        } else {
+            ASSET_MANAGER.playAsset("./sounds/enemies/Hurt.wav")
+            this.health -= 1
+        }
     };
 
     draw(ctx) {

@@ -3,7 +3,7 @@ class EnemyBullet {
 		Object.assign(this, {game, x, y, playerTeam, bulletDirection, size, bulletSpeed}); 
         this.width = 13;
         this.height = 6;
-		this.animator = new Animator(ASSET_MANAGER.getAsset("./items-spritesheet/bullet-sprite.png"), 
+		this.animator = new Animator(ASSET_MANAGER.getAsset("./items-spritesheet/enemy-bullet.png"), 
 		0, 0, this.width, this.height, 1, 0.2);
 		if (this.bulletDirection == 0) {
             this.x = this.x - 80;

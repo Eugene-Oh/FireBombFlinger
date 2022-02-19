@@ -7,11 +7,13 @@ class SceneManager {
         this.mainplayer = new Player(gameEngine);
         this.HUD = new HUD(gameEngine, this.mainplayer);
         this.starting = true;
-        this.loadLevelOne();
+        this.loadStartScreen();
     };
 
     clearEntities() {
-        this.game.entities = [];
+        this.game.entities.forEach(function (entity) {
+            entity.removeFromWorld = true;
+        });
     };
 
     loadStartScreen() {
@@ -47,7 +49,6 @@ class SceneManager {
         gameEngine.addEntity(new boundingfloor(gameEngine,1700,555,338,10));
         gameEngine.addEntity(new boundingfloor(gameEngine,2210,428,425,10));
 
-
         gameEngine.addEntity(new rope(gameEngine,245,416,550,0,12,95,2)); 
         gameEngine.addEntity(new rope(gameEngine,245,416,550,0 + 190,12,20,2)); 
 
@@ -55,51 +56,50 @@ class SceneManager {
         gameEngine.addEntity(new rope(gameEngine,245,416,1620,270,12,95,2)); 
         gameEngine.addEntity(new rope(gameEngine,245,416,1620,270 + 190,12,50,2)); 
 
-        // gameEngine.addEntity(new rope(gameEngine,245,416,2800,200,12,15,2)); 
-        // gameEngine.addEntity(new rope(gameEngine,245,416,3300,600,12,15,2)); 
-        // gameEngine.addEntity(new rope(gameEngine,245,416,3800,500,12,30,2)); 
-
         gameEngine.addEntity(new Background(gameEngine, 1984, 1088, ASSET_MANAGER.getAsset("./backgrounds/harbor.png"), .665, 0));
         gameEngine.addEntity(new Background(gameEngine, 1984, 1088, ASSET_MANAGER.getAsset("./backgrounds/harbor2.png"), .665, 1315 ));
         gameEngine.addEntity(new Background(gameEngine, 1984, 1088, ASSET_MANAGER.getAsset("./backgrounds/offmap.png"), .665, -1315 )); 
        
-
         gameEngine.addEntity(new rope(gameEngine,245,416,2800,200,12,15,2)); 
         gameEngine.addEntity(new rope(gameEngine,245,416,3300,600,12,15,2)); 
         gameEngine.addEntity(new rope(gameEngine,245,416,3600,500,12,60,2)); 
         gameEngine.addEntity(new box(gameEngine,705,1,3700,380,128,127,0.5));   
         gameEngine.addEntity(new box(gameEngine,705,1,3695,355,128,127,0.20));   
+
         gameEngine.addEntity(new Sniper(gameEngine, 3670, 337, 0)); 
+
         gameEngine.addEntity(new BackgroundDynamic(gameEngine,128,768,100,320,4300,510,0.665));  
         gameEngine.addEntity(new Sniper(gameEngine, 4250, 470, 0)); 
+
         gameEngine.addEntity(new rope(gameEngine,245,416,3850,500,12,60,2));  
         gameEngine.addEntity(new rope(gameEngine,245,416,3850,150,12,60,2));  
+
         gameEngine.addEntity(new BackgroundDynamic(gameEngine,768,448,450,700,3950,300,0.665)); 
         gameEngine.addEntity(new BackgroundDynamic(gameEngine,128,768,67,320,3700,510,0.665)); 
+
         gameEngine.addEntity(new crane(gameEngine,320,0,3700,420,63,127,1)); 
         gameEngine.addEntity(new crane(gameEngine,320,0,3700,548,63,90,1));
+
         gameEngine.addEntity(new boundingfloor(gameEngine,3950,300,300,10));
-        gameEngine.addEntity(new boundingfloor(gameEngine,0,0,10,600));
-        // gameEngine.addEntity(new Background(gameEngine));   
-        // var c = 100;
-        // gameEngine.addEntity(new emptybackground(gameEngine,208,32,2500,115,175,175,2.5)); 
-        // gameEngine.addEntity(new emptybackground(gameEngine,160,208,2500,542,31,63,3)); 
-        // gameEngine.addEntity(new emptybackground(gameEngine,112,0,2500,0,63,32,4));    
-        // ASSET_MANAGER.pauseBackgroundMusic();
-        // ASSET_MANAGER.playAsset("./sounds/background/DynamicFight_3.mp3")
+        gameEngine.addEntity(new boundingfloor(gameEngine,0,0,10,600));   
+
         gameEngine.addEntity(new Background(gameEngine, 1984, 1088, ASSET_MANAGER.getAsset("./backgrounds/offmap.png"), .665, 1315 * 2));
         gameEngine.addEntity(new Background(gameEngine, 1984, 1088, ASSET_MANAGER.getAsset("./backgrounds/offmap.png"), .665, 1315 * 3));  
         gameEngine.addEntity(new Background(gameEngine, 1984, 1088, ASSET_MANAGER.getAsset("./backgrounds/offmap.png"), .665, 1315 * 4));
+        ASSET_MANAGER.playAsset("./sounds/background/DynamicFight_3.mp3")
     };
 
     gameLoss() {
         this.clearEntities();
+        ASSET_MANAGER.pauseBackgroundMusic();
         ASSET_MANAGER.playAsset("./sounds/game/Gameloss.mp3")
         gameEngine.addEntity(new Gameloss(gameEngine));
     };
 
     gameWon() {
         this.clearEntities();
+        ASSET_MANAGER.pauseBackgroundMusic();
+        ASSET_MANAGER.playAsset("./sounds/game/Gamewin.wav")
         gameEngine.addEntity(new Gamewon(gameEngine));
     };
 
@@ -110,10 +110,10 @@ class SceneManager {
 
     update() {
         this.updateAudio();
-        // if (this.game.keys["Enter"] && this.starting == true) {
-        //     this.starting = false;
-        //     this.loadLevelOne();
-        // } 
+        if (this.game.keys["Enter"] && this.starting == true) {
+            this.starting = false;
+            this.loadLevelOne();
+        } 
         if (this.mainplayer.health == 0 && this.mainplayer.elapsedDeathTime > 1.5) {
             this.gameLoss();
         } else if (this.mainplayer.gamewon == true) {
@@ -126,9 +126,6 @@ class SceneManager {
         
         // Updates the camera.
         let midpoint = params.canvas_width / 2;
-        // if (this.x < this.mainplayer.x - midpoint) {
-        //     this.x = this.mainplayer.x - midpoint;
-        // };
         this.x = this.mainplayer.x - midpoint;
     };
 
@@ -149,7 +146,7 @@ class HUD {
     draw(ctx) {
         ctx.font = "30px Arial";
         ctx.fillStyle = 'White';
-        ctx.fillText("Health: " + this.mainplayer.health + "/" + this.mainplayer.totalHealth, 50, 35);
+        ctx.fillText("Health: " + this.mainplayer.health + "/" + this.mainplayer.totalHealth, 100, 35);
     };
 }
 
