@@ -11,7 +11,7 @@ class Rocket {
 		this.maxSpeed = this.bulletSpeed;
         this.removeFromWorldValue = 0;
         this.velocityY = 0;
-		this.gravity = 0.015;
+		this.gravity = 1000;
 		//this.elapsedTime = 0;
 		
         this.updateBB();
@@ -27,12 +27,12 @@ class Rocket {
         const TICK = this.game.clockTick;
         this.elapsedTime += TICK;
         if (this.bulletDirection == 1) {
-            this.x += this.maxSpeed * this.game.clockTick;
+            this.x += this.maxSpeed * TICK;
         } else {
-            this.x -= this.maxSpeed * this.game.clockTick;
+            this.x -= this.maxSpeed * TICK;
         }
-        this.y -= this.velocityY;
-        this.velocityY -= this.gravity;
+        this.y -= this.velocityY * TICK;
+        this.velocityY -= this.gravity * TICK;
 
 		//Collisions
 		var that = this;

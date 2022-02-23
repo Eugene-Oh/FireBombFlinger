@@ -13,7 +13,7 @@ class Player {
         this.yBound= 600;
         this.velocityX = 0;
         this.velocityY = 0;
-        this.gravity = 0.04;
+        this.gravity = 10;
         this.jumpingHeight = 4;
 
         this.elapsedTime = 0;
@@ -33,7 +33,7 @@ class Player {
         this.shooting = 0;
 
         this.size = 2.25;
-        this.movementspeed = 2;
+        this.movementspeed = 500;
         this.animationspeed = .1
 
         this.deathMaxCounter = 4;
@@ -119,7 +119,7 @@ class Player {
             } else {
                 this.velocityX = 0;
             };
-            this.x += this.velocityX;
+            this.x += this.velocityX * TICK;
     
             // Jumping mechanics
             if (this.game.keys["w"] && !this.game.keys["s"] && this.velocityY == 0) {
@@ -145,7 +145,7 @@ class Player {
             }
             // Y-position and velocityX updates
             this.y -= this.velocityY;
-            this.velocityY -= this.gravity;
+            this.velocityY -= this.gravity * TICK;
             if (this.y > this.yBound) {
                 this.y = this.yBound
                 this.velocityY = 0;
@@ -180,10 +180,17 @@ class Player {
 				const target = { x: this.game.mouse.x + this.game.camera.x, y: this.game.mouse.y};
 				
 				if (this.jumping == -1) {
-	                this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90, this.y + 20, true, 1.5, 1000, target));
+                    if (this.direction == 1) {
+                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - (this.PLAYER_WIDTH), this.y + 20, true, 1.5, 1000, target));
+                    } else {
+                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - (this.PLAYER_WIDTH * 4), this.y + 20, true, 1.5, 1000, target));
+                    }
 	            } else {
-					
-	                this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true, 1.5, 1000, target));
+					if (this.direction == 1) {
+                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - (this.PLAYER_WIDTH), this.y + 18, true, 1.5, 1000, target));
+                    } else {
+                        this.game.addEntityToFrontOfList(new Bullet(gameEngine, this.x + 90 - (this.PLAYER_WIDTH * 4), this.y + 18, true, 1.5, 1000, target));
+                    }
 	            }
 	            this.elapsedTime = 0;
 				
@@ -237,7 +244,7 @@ class Player {
                     //  that.velocityY +=that.gravity;  
                       if (that.game.keys["b"]) {   
       
-                          that.velocityY =that.gravity;   
+                          that.velocityY =that.gravity* that.game.clockTick;;   
                           that.y += that.velocityY;
                       
                       if (that.game.keys["w"]) { 

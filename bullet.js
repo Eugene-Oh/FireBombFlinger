@@ -30,14 +30,14 @@ class Bullet {
     };
 	
 	update(){
-		
+        const TICK = this.game.clockTick;
 		if (this.x - this.game.camera.x < 0 || this.x - this.game.camera.x > 1280) {
             this.remove();
         }
 		
 		//Speed of the bullet
-		this.x += (this.velocity.x * this.game.clockTick);
-		this.y += (this.velocity.y * this.game.clockTick);
+		this.x += (this.velocity.x * TICK);
+		this.y += (this.velocity.y * TICK);
 
 		this.updateBB();
 
