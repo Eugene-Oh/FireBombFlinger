@@ -25,7 +25,8 @@ class SceneManager {
 
         gameEngine.addEntity(this.mainplayer);
         gameEngine.addEntity(this.HUD);
-
+        gameEngine.addEntity(new lazerPickup(gameEngine,7,37, 250,350,17,20,2)); 
+        gameEngine.addEntity(new rocketPickup(gameEngine,0,0,400,250,860,860,0.05));
         gameEngine.addEntity(new Sniper(gameEngine, 375, 0, 1));
         gameEngine.addEntity(new Sniper(gameEngine, 980, 383, 0));
         gameEngine.addEntity(new Sniper(gameEngine, 2200, 510, 0));

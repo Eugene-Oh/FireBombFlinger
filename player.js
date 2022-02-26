@@ -6,8 +6,8 @@ class Player {
         this.health = this.totalHealth;
         
         this.gamewon = false;
-
-        this.x = 4320;
+        this.lazerPickup = false;
+        this.x = 20;
         this.crouchedYReduction = 12;
         this.y = 0;
         this.yBound= 600;
@@ -21,7 +21,9 @@ class Player {
         this.walkSoundRate = .4
         this.elapsedDeathTime = 0;
         this.fireRate = .30;
-
+        //this.rocket = false; 
+        this.rocket = false; 
+        this.lazer = false;
         this.PLAYER_WIDTH = 21;
         this.PLAYER_HEIGHT = 34;
 
@@ -173,7 +175,7 @@ class Player {
 
             this.shooting = 0;
             // Shooting bullets on mouse click
-            if (this.game.click && this.game.shoot == true && this.elapsedTime > this.fireRate) {
+            if (this.game.click && this.game.shoot == true && this.elapsedTime > this.fireRate && this.rocket == false && this.lazer != true) {
                 ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
 				if (this.elapsedTime > this.fireRate) {
 				
@@ -190,7 +192,40 @@ class Player {
 			} 
 				this.game.shoot = false;
 				
-			} else if (this.game.click) {
+			} else if(this.game.click && this.game.shoot == true && this.elapsedTime > this.fireRate && this.rocket == true && lazer == false) { 
+                ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
+				if (this.elapsedTime > this.fireRate) {
+				
+				const target = { x: this.game.mouse.x + this.game.camera.x, y: this.game.mouse.y};
+				
+				if (this.jumping == -1) {
+	                this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.x + 90, this.y + 20, true, 1.5, 1000, target));
+	            } else {
+					
+	                this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true, 1.5, 1000, target));
+	            }
+	            this.elapsedTime = 0;
+				
+			} 
+				this.game.shoot = false;
+            } else if(this.game.click && this.game.shoot == true && this.elapsedTime > this.fireRate && this.lazer == true && this.rocket == false ) { 
+                ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
+				if (this.elapsedTime > this.fireRate) {
+				
+				const target = { x: this.game.mouse.x + this.game.camera.x, y: this.game.mouse.y};
+                    
+				if (this.jumping == -1) {
+	              //  this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.x + 90, this.y + 20, true, 1.5, 1000, target));
+	            } else {
+					
+	               // this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true, 1.5, 1000, target)); 
+                        this.game.addEntityToFrontOfList(new lazer(gameEngine));
+	            }
+	            this.elapsedTime = 0;
+				
+			} 
+				this.game.shoot = false;
+            }  else if (this.game.click) {
 				this.shooting = 0;
 			}
 			
@@ -208,7 +243,7 @@ class Player {
             this.game.entities.forEach(function(entity) {
                 // Collisions with other enemies and strucutres.
                 if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && !(entity instanceof Bullet) && 
-                    !(entity instanceof EnemyBullet) && !(entity instanceof rope) && !(entity instanceof Explosion) && !(entity instanceof Rocket) && !(entity instanceof pot)) { 
+                    !(entity instanceof EnemyBullet) && !(entity instanceof rope) && !(entity instanceof Explosion) && !(entity instanceof Rocket) && !(entity instanceof pot) && !(entity instanceof rocketPickup) && !(entity instanceof lazerPickup)) { 
                     if (that.lastBB.bottom <= entity.BB.top && that.velocityY < 0) {  
                         that.yBound = entity.BB.top;
                         that.y = entity.BB.top - that.BB.height;     
@@ -228,7 +263,11 @@ class Player {
                     entity.remove();
                     ASSET_MANAGER.playAsset("./sounds/player/Hurt.wav")
                     that.health -= 2;
-                } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof Explosion && entity.damageDone == false) {
+                }/*else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof lazer) {
+                  //  entity.remove();
+                    ASSET_MANAGER.playAsset("./sounds/player/Hurt.wav")
+                    that.health -= 1;
+                }*/ else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof Explosion && entity.damageDone == false) {
                     that.health -= 5;
                     ASSET_MANAGER.playAsset("./sounds/player/Hurt.wav")
                     entity.damageDone = true
@@ -255,7 +294,16 @@ class Player {
                     }
                 } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof pot) {
                     that.gamewon = true;
-                } else {
+                } else if(entity.BB && that.BB.collide(entity.BB) &&!(entity instanceof Player) && entity instanceof rocketPickup && that.lazer == false)  {  
+                   // that.gamewon = true;
+                    that.rocket = true; 
+                    entity.remove();
+                } else if(entity.BB && that.BB.collide(entity.BB) &&!(entity instanceof Player) && entity instanceof lazerPickup && that.rocket == false)  {  
+                  //  that.gamewon = true;
+                    that.lazer = true; 
+                    entity.remove();
+                }
+                else {
                     that.yBound = 2000;
                 }
             });
@@ -340,7 +388,8 @@ class Player {
         }
         ctx.strokeStyle = 'White';
         // To see the bounding box
-        if (params.debug) {
+        if (params.debug) { 
+            ctx.strokeRect(this.game.mouse.x,this.game.mouse.y,10,10);
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
         }
     }

@@ -58,11 +58,12 @@ class Sniper {
         }
         if (this.removeFromWorldValue != 1) {
             this.updateBB();
-        }
+        } 
+    
     };
 
     remove() {
-        if (this.health == 0) {
+        if (this.health <= 0) {
             ASSET_MANAGER.playAsset("./sounds/enemies/Die.mp3")
             this.removeFromWorldValue = 1;
             this.BB = new BoundingBox(0, 0, 0, 0);
