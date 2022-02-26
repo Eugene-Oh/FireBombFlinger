@@ -2,15 +2,30 @@ class SceneManager {
     constructor(game) {
         this.game = game;
         this.game.camera = this;
+        
+        // Used for camera object.
         this.x = 0;
+
         this.score = 0;
-        this.mainplayer = new Player(gameEngine);
+        this.mainplayer = new Player(gameEngine, 20, 0);
         this.HUD = new HUD(gameEngine, this.mainplayer);
         this.starting = true;
+        this.levelOne = false;
+        this.levelTwo = false;   
+
         this.loadStartScreen();
     };
 
     clearEntities() {
+        this.game.entities.forEach(function (entity) {
+            if (!(entity instanceof SceneManager)) {
+                entity.removeFromWorld = true;
+            }
+        });
+    };
+
+    // This fixes the bug where sound would not play if the game is lost or won.
+    clearEverything() {
         this.game.entities.forEach(function (entity) {
             entity.removeFromWorld = true;
         });
@@ -21,10 +36,15 @@ class SceneManager {
     }
 
     loadLevelOne() {
-        gameEngine.addEntity(new pot(gameEngine,7500, 250, 3))
-
+        this.levelOne = true;
         gameEngine.addEntity(this.mainplayer);
         gameEngine.addEntity(this.HUD);
+
+        gameEngine.addEntity(new Drone(gameEngine, 1850, 2, 3))
+        gameEngine.addEntity(new Drone(gameEngine, 3000, 2, 3))
+        gameEngine.addEntity(new Drone(gameEngine, 4500, 2, 3))
+        gameEngine.addEntity(new Drone(gameEngine, 5500, 2, 3))
+        gameEngine.addEntity(new pot(gameEngine, 7500, 250, 3))
 
         gameEngine.addEntity(new Sniper(gameEngine, 375, 0, 1));
         gameEngine.addEntity(new Sniper(gameEngine, 980, 383, 0));
@@ -97,7 +117,7 @@ class SceneManager {
         gameEngine.addEntity(new boundingfloor(gameEngine,6525,510,85,10)); 
         gameEngine.addEntity(new rope(gameEngine,245,416,6925,130,12,20,2));  
         gameEngine.addEntity(new BackgroundDynamic(gameEngine,768,448,450,700,7350,300,0.665));  
-        gameEngine.addEntity(new boundingfloor(gameEngine,7350,300,250,10)); 
+        gameEngine.addEntity(new boundingfloor(gameEngine,7350,300,300,10)); 
         gameEngine.addEntity(new rope(gameEngine,245,416,3850,500,12,60,2));  
         gameEngine.addEntity(new rope(gameEngine,245,416,3850,150,12,60,2));  
 
@@ -116,7 +136,35 @@ class SceneManager {
         gameEngine.addEntity(new Background(gameEngine, 1984, 1088, ASSET_MANAGER.getAsset("./backgrounds/offmap.png"), .665, 1315 * 5));
         gameEngine.addEntity(new Background(gameEngine, 1984, 1088, ASSET_MANAGER.getAsset("./backgrounds/offmap.png"), .665, 1315 * 6));
         gameEngine.addEntity(new Background(gameEngine, 1984, 1088, ASSET_MANAGER.getAsset("./backgrounds/offmap.png"), .665, 1315 * 7));
+
         ASSET_MANAGER.playAsset("./sounds/background/DynamicFight_3.mp3")
+    };
+
+    loadLevelTwo() {
+        this.levelOne = false;
+        this.levelTwo = true;
+        this.game.camera = this;
+        this.currenthealth = this.mainplayer.health;
+        this.mainplayer = new Player(gameEngine, -200, 0);
+        this.mainplayer.health = this.currenthealth;
+        this.HUD = new HUD(gameEngine, this.mainplayer);
+        gameEngine.addEntity(this.mainplayer)
+        gameEngine.addEntity(this.HUD);
+
+        gameEngine.addEntity(new golemboss(gameEngine, 250, 350, this.mainplayer))
+        gameEngine.addEntity(new pot(gameEngine, 1485 * 2.4, 565, 3))
+
+        // The starting and ending bounding walls
+        gameEngine.addEntity(new boundingfloor(gameEngine,-610,0, 10, 1000));
+        gameEngine.addEntity(new boundingfloor(gameEngine, 1485,0, 10, 1000));
+
+        gameEngine.addEntity(new boundingfloor(gameEngine,-1485 * 2,610, 1485 * 5, 10));
+        
+        gameEngine.addEntity(new Background(gameEngine, 496, 272, ASSET_MANAGER.getAsset("./backgrounds/subway.png"), 3, -1485 * 2));
+        gameEngine.addEntity(new Background(gameEngine, 496, 272, ASSET_MANAGER.getAsset("./backgrounds/subway.png"), 3, -1485));
+        gameEngine.addEntity(new Background(gameEngine, 496, 272, ASSET_MANAGER.getAsset("./backgrounds/subway.png"), 3, 0));
+        gameEngine.addEntity(new Background(gameEngine, 496, 272, ASSET_MANAGER.getAsset("./backgrounds/subway.png"), 3, 1485));
+        gameEngine.addEntity(new Background(gameEngine, 496, 272, ASSET_MANAGER.getAsset("./backgrounds/subway.png"), 3, 1485 * 2));
     };
 
     gameLoss() {
@@ -145,8 +193,15 @@ class SceneManager {
             this.loadLevelOne();
         } 
         if (this.mainplayer.health == 0 && this.mainplayer.elapsedDeathTime > 1.5) {
+            this.clearEverything()
             this.gameLoss();
-        } else if (this.mainplayer.gamewon == true) {
+        } else if (this.mainplayer.gamewon == true && this.levelOne == true) {
+            this.clearEntities();
+            this.mainplayer.gamewon = false
+            this.loadLevelTwo();
+            // this.mainplayer.gamewon = false
+        } else if (this.mainplayer.gamewon == true && this.levelTwo == true) {
+            this.clearEverything()
             this.gameWon();
         }
 
@@ -174,9 +229,11 @@ class HUD {
     };
 
     draw(ctx) {
-        ctx.font = "30px Arial";
-        ctx.fillStyle = 'White';
-        ctx.fillText("Health: " + this.mainplayer.health + "/" + this.mainplayer.totalHealth, 100, 35);
+        if (!(this.mainplayer.gamewon == true) && !(this.mainplayer.health == 0 && this.mainplayer.elapsedDeathTime > 1.5)) {
+            ctx.font = "30px Arial";
+            ctx.fillStyle = 'White';
+            ctx.fillText("Health: " + this.mainplayer.health + "/" + this.mainplayer.totalHealth, 100, 35);
+        }
     };
 }
 

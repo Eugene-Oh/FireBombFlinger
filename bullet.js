@@ -30,14 +30,14 @@ class Bullet {
     };
 	
 	update(){
-		
-		if (this.x - this.game.camera.x < 0 || this.x - this.game.camera.x > 1280) {
+        const TICK = this.game.clockTick;
+		if (this.x - this.game.camera.x < 50 || this.x - this.game.camera.x > 1230) {
             this.remove();
         }
 		
 		//Speed of the bullet
-		this.x += (this.velocity.x * this.game.clockTick);
-		this.y += (this.velocity.y * this.game.clockTick);
+		this.x += (this.velocity.x * TICK);
+		this.y += (this.velocity.y * TICK);
 
 		this.updateBB();
 
@@ -46,12 +46,12 @@ class Bullet {
 		//Collision
 		this.game.entities.forEach(function(entity){
 			if(entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Bullet)) { 
-                if (entity instanceof Sniper || entity instanceof RPG) {
+                if (entity instanceof Sniper || entity instanceof RPG || entity instanceof Drone || entity instanceof golemboss) {
                     that.remove();
 					entity.remove();
                 }else if(entity instanceof box) { 
 					that.remove();
-				}
+				} 
             }
 			
 		});

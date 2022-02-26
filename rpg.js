@@ -48,7 +48,7 @@ class RPG {
         const TICK = this.game.clockTick
         this.elapsedTime += TICK
         // Player detection
-        if ((this.spawnX - this.game.camera.x > 100 && this.spawnX - this.game.camera.x < 1180)) {
+        if ((this.spawnX - this.game.camera.x > 0 && this.spawnX - this.game.camera.x < 1280)) {
             if (this.elapsedTime >= this.fireRate && this.removeFromWorldValue != 1) {
                 this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.spawnX + 90, this.spawnY + 3, true, this.direction, .021, this.bulletSpeed));
                 this.elapsedTime = 0;

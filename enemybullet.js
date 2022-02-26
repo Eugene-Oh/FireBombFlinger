@@ -22,13 +22,14 @@ class EnemyBullet {
     };
 	
 	update(){
+        const TICK = this.game.clockTick;
         if (this.x - this.game.camera.x < -100 || this.x - this.game.camera.x > 1280 + 100) {
             this.remove();
         }
         if (this.bulletDirection == 1) {
-            this.x += this.maxSpeed * this.game.clockTick;
+            this.x += this.maxSpeed * TICK;
         } else {
-            this.x -= this.maxSpeed * this.game.clockTick;
+            this.x -= this.maxSpeed * TICK;
         }
 
 		var that = this;
