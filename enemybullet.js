@@ -3,7 +3,7 @@ class EnemyBullet {
 		Object.assign(this, {game, x, y, playerTeam, bulletDirection, size, bulletSpeed}); 
         this.width = 13;
         this.height = 6;
-		this.animator = new Animator(ASSET_MANAGER.getAsset("./items-spritesheet/bullet-sprite.png"), 
+		this.animator = new Animator(ASSET_MANAGER.getAsset("./items-spritesheet/enemy-bullet.png"), 
 		0, 0, this.width, this.height, 1, 0.2);
 		if (this.bulletDirection == 0) {
             this.x = this.x - 80;
@@ -22,22 +22,22 @@ class EnemyBullet {
     };
 	
 	update(){
-        if (this.x - this.game.camera.x < -1000 || this.x - this.game.camera.x > 2280) {
+        const TICK = this.game.clockTick;
+        if (this.x - this.game.camera.x < -100 || this.x - this.game.camera.x > 1280 + 100) {
             this.remove();
         }
         if (this.bulletDirection == 1) {
-            this.x += this.maxSpeed * this.game.clockTick;
+            this.x += this.maxSpeed * TICK;
         } else {
-            this.x -= this.maxSpeed * this.game.clockTick;
+            this.x -= this.maxSpeed * TICK;
         }
 
 		var that = this;
 		//Collision
 		this.game.entities.forEach(function(entity){
 			if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Bullet)) { 
-                if (entity instanceof Sniper || entity instanceof RPG) {
+                if (entity instanceof box) { 
                     that.remove();
-					entity.remove();
                 }
             }
 		});
