@@ -21,6 +21,16 @@ ASSET_MANAGER.queueDownload("./playersprite/idleshootreverse.png")
 ASSET_MANAGER.queueDownload("./playersprite/playerdeath.png")
 ASSET_MANAGER.queueDownload("./playersprite/playerdeathreverse.png")
 
+
+ASSET_MANAGER.queueDownload("./boss-sprite/boss-sleep.png")
+ASSET_MANAGER.queueDownload("./boss-sprite/boss-wake.png")
+ASSET_MANAGER.queueDownload("./boss-sprite/boss-idle.png")
+ASSET_MANAGER.queueDownload("./boss-sprite/boss-idle-reverse.png")
+ASSET_MANAGER.queueDownload("./boss-sprite/boss-shoot.png")
+ASSET_MANAGER.queueDownload("./boss-sprite/boss-shoot-reverse.png")
+ASSET_MANAGER.queueDownload("./boss-sprite/boss-death.png")
+ASSET_MANAGER.queueDownload("./boss-sprite/boss-death-reverse.png")
+
 ASSET_MANAGER.queueDownload("./snipersprite/sniperidle.png")
 ASSET_MANAGER.queueDownload("./snipersprite/sniperidlereverse.png")
 ASSET_MANAGER.queueDownload("./snipersprite/snipershooting.png")
@@ -30,6 +40,8 @@ ASSET_MANAGER.queueDownload("./rpgsprite/rpgidle.png")
 ASSET_MANAGER.queueDownload("./rpgsprite/rpgidlereverse.png")
 ASSET_MANAGER.queueDownload("./rpgsprite/rpgshooting.png")
 ASSET_MANAGER.queueDownload("./rpgsprite/rpgshootingreverse.png")
+
+ASSET_MANAGER.queueDownload("./dronesprite/drone.png")
 
 ASSET_MANAGER.queueDownload("./enemydeath/enemydeath.png")
 ASSET_MANAGER.queueDownload("./enemydeath/enemydeathreverse.png")
@@ -46,6 +58,7 @@ ASSET_MANAGER.queueDownload("./Harbor_Assets.png")
 ASSET_MANAGER.queueDownload("./backgrounds/harbor.png")
 ASSET_MANAGER.queueDownload("./backgrounds/harbor2.png")
 ASSET_MANAGER.queueDownload("./backgrounds/offmap.png")
+ASSET_MANAGER.queueDownload("./backgrounds/subway.png")
 
 ASSET_MANAGER.queueDownload("./sounds/enemies/RocketExplosion.wav")
 ASSET_MANAGER.queueDownload("./sounds/enemies/Snipershoot.mp3")
