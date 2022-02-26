@@ -13,8 +13,8 @@ class Player {
         this.yBound= 600;
         this.velocityX = 0;
         this.velocityY = 0;
-        this.gravity = 10;
-        this.jumpingHeight = 5;
+        this.gravity = 2000;
+        this.jumpingHeight = 1000;
 
         this.elapsedTime = 0;
         this.elapsedTimeWalk = 0;
@@ -144,7 +144,7 @@ class Player {
                 this.jumping = 0;
             }
             // Y-position and velocityX updates
-            this.y -= this.velocityY;
+            this.y -= this.velocityY * TICK;
             this.velocityY -= this.gravity * TICK;
             if (this.y > this.yBound) {
                 this.y = this.yBound
@@ -245,16 +245,16 @@ class Player {
                     //  that.velocityY +=that.gravity;  
                       if (that.game.keys["b"]) {   
       
-                          that.velocityY =that.gravity* that.game.clockTick;;   
-                          that.y += that.velocityY;
+                          that.velocityY =that.gravity* that.game.clockTick;   
+                          that.y += that.velocityY * that.game.clockTick;
                       
                       if (that.game.keys["w"]) { 
-                          that.y-=1;   
+                          that.y-=500 * that.game.clockTick;   
                          // that.velocityY +=gravity;  
                       } else if (that.game.keys["s"] && that.BB.bottom <= entity.BB.bottom) {  
       
-                          that.y+=1;   
-                          /* 
+                          that.y+=500 * that.game.clockTick;   
+                          /* w
                           if (that.y > that.yBound) {
                               that.y = that.yBound
                               that.velocityY = 0;
