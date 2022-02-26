@@ -14,7 +14,7 @@ class Player {
         this.velocityX = 0;
         this.velocityY = 0;
         this.gravity = 10;
-        this.jumpingHeight = 4.2;
+        this.jumpingHeight = 5;
 
         this.elapsedTime = 0;
         this.elapsedTimeWalk = 0;
