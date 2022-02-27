@@ -31,7 +31,7 @@ class Bullet {
 	
 	update(){
         const TICK = this.game.clockTick;
-		if (this.x - this.game.camera.x < 50 || this.x - this.game.camera.x > 1230) {
+		if (this.x - this.game.camera.x < 0 || this.x - this.game.camera.x > 1280) {
             this.remove();
         }
 		
@@ -46,12 +46,12 @@ class Bullet {
 		//Collision
 		this.game.entities.forEach(function(entity){
 			if(entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Bullet)) { 
-                if (entity instanceof Sniper || entity instanceof RPG || entity instanceof Drone || entity instanceof golemboss) {
+                if (entity instanceof Sniper || entity instanceof RPG) {
                     that.remove();
 					entity.remove();
                 }else if(entity instanceof box) { 
 					that.remove();
-				} 
+				}
             }
 			
 		});

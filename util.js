@@ -8,7 +8,7 @@ const params = {
  * @param {Number} n
  * @returns Random Integer Between 0 and n-1
  */
-const randomInt = n => Math.floor(random() * n);
+const randomInt = n => Math.floor(Math.random() * n);
 
 /**
  * @param {Number} r Red Value
