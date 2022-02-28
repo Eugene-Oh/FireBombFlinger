@@ -151,7 +151,7 @@ class SceneManager {
         gameEngine.addEntity(this.mainplayer)
         gameEngine.addEntity(this.HUD);
 
-        gameEngine.addEntity(new golemboss(gameEngine, 250, 350, this.mainplayer))
+        gameEngine.addEntity(new golemboss(gameEngine, 250, 300, this.mainplayer))
         gameEngine.addEntity(new pot(gameEngine, 1485 * 2.4, 565, 3))
 
         // The starting and ending bounding walls
