@@ -144,7 +144,7 @@ class SceneManager {
         this.levelOne = false;
         this.levelTwo = true;
         this.game.camera = this;
-        this.currenthealth = this.mainplayer.health;
+        this.currenthealth = 50;
         this.mainplayer = new Player(gameEngine, -200, 0);
         this.mainplayer.health = this.currenthealth;
         this.HUD = new HUD(gameEngine, this.mainplayer);
