@@ -47,7 +47,6 @@ class SceneManager {
         gameEngine.addEntity(new pot(gameEngine, 7500, 250, 3))
 
         gameEngine.addEntity(new Sniper(gameEngine, 375, 0, 1));
-        gameEngine.addEntity(new Sniper(gameEngine, 980, 383, 0));
         gameEngine.addEntity(new Sniper(gameEngine, 2200, 510, 0));
     
         gameEngine.addEntity(new Rocket(gameEngine, 500, 200, 0));
