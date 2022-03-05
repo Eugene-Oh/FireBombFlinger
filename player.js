@@ -243,7 +243,7 @@ class Player {
                 } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && (entity instanceof rope)) {
                     that.yBound = entity.BB.top;
                     //  that.velocityY +=that.gravity;  
-                      if (that.game.keys["b"]) {   
+                      if (that.game.keys["c"]) {   
       
                           that.velocityY =that.gravity* that.game.clockTick;   
                           that.y += that.velocityY * that.game.clockTick;
