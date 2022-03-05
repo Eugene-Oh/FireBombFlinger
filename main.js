@@ -79,6 +79,7 @@ ASSET_MANAGER.queueDownload("./harborLevel2.png")
 
 ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameWorld");
+	canvas.onselectstart = function () { return false; }
 	const ctx = canvas.getContext("2d");
 	ctx.imageSmoothingEnabled = false;
 	scene = new SceneManager(gameEngine);
