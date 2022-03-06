@@ -7,7 +7,7 @@ class SceneManager {
         this.x = 0;
 
         this.score = 0;
-        this.mainplayer = new Player(gameEngine, 20, 0);
+        this.mainplayer = new Player(gameEngine,100,0);
         this.HUD = new HUD(gameEngine, this.mainplayer);
         this.starting = true;
         this.levelOne = false;
@@ -61,6 +61,8 @@ class SceneManager {
         gameEngine.addEntity(new box(gameEngine,705,1,446,318,128,127,.5)); 
     
         gameEngine.addEntity(new boundingfloor(gameEngine,45,45,380,10)); 
+        gameEngine.addEntity(new boundingfloor(gameEngine,0,0,43,500)); 
+
         gameEngine.addEntity(new boundingfloor(gameEngine,630,130,130,10));
         gameEngine.addEntity(new boundingfloor(gameEngine,820,130,250,10));
         gameEngine.addEntity(new boundingfloor(gameEngine,0,510,500,10)); 
@@ -69,7 +71,6 @@ class SceneManager {
         gameEngine.addEntity(new boundingfloor(gameEngine,2210,428,425,10));
 
         gameEngine.addEntity(new rope(gameEngine,245,416,550,0,12,95,2)); 
-        gameEngine.addEntity(new rope(gameEngine,245,416,550,0 + 190,12,20,2)); 
 
         gameEngine.addEntity(new rope(gameEngine,245,416,1620,270 - 190,12,95,2)); 
         gameEngine.addEntity(new rope(gameEngine,245,416,1620,270,12,95,2)); 
@@ -143,7 +144,7 @@ class SceneManager {
         this.levelOne = false;
         this.levelTwo = true;
         this.game.camera = this;
-        this.currenthealth = 50;
+        this.currenthealth = this.mainplayer.health;
         this.mainplayer = new Player(gameEngine, -200, 0);
         this.mainplayer.health = this.currenthealth;
         this.HUD = new HUD(gameEngine, this.mainplayer);
@@ -154,8 +155,8 @@ class SceneManager {
         gameEngine.addEntity(new pot(gameEngine, 1485 * 2.4, 565, 3))
 
         // The starting and ending bounding walls
-        gameEngine.addEntity(new boundingfloor(gameEngine,-610,0, 10, 1000));
-        gameEngine.addEntity(new boundingfloor(gameEngine, 1485,0, 10, 1000));
+        gameEngine.addEntity(new boundingfloor(gameEngine,-610,0, 100, 1000));
+        gameEngine.addEntity(new boundingfloor(gameEngine, 1485,0, 100, 1000));
 
         gameEngine.addEntity(new boundingfloor(gameEngine,-1485 * 2,610, 1485 * 5, 10));
         
