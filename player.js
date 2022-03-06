@@ -21,6 +21,12 @@ class Player {
         this.walkSoundRate = .4
         this.elapsedDeathTime = 0;
         this.fireRate = .30;
+        
+        this.jumpcooldown = .8;
+        this.elapsedjumptime = 10;
+
+        this.canmoveleft = false;
+        this.canmoveright = false;
 
         this.PLAYER_WIDTH = 21;
         this.PLAYER_HEIGHT = 34;
@@ -96,37 +102,21 @@ class Player {
         const TICK = this.game.clockTick;
         this.elapsedTime += TICK;
         this.elapsedTimeWalk += TICK;
+        this.elapsedjumptime += TICK;
+        this.canmoveleft = true;
+        this.canmoveright = true;
         // Lateral and idle movements
         if (this.y > 720) {
             this.health = 0;
         }
         if (this.health > 0) {
-            if (this.game.keys["a"] && !this.game.keys["d"] && !this.game.keys["s"]) {
-                if (this.elapsedTimeWalk > this.walkSoundRate) {
-                    ASSET_MANAGER.playAsset("./sounds/player/Walk.wav")
-                    this.elapsedTimeWalk = 0;
-                    
-                }
-                this.velocityX = this.movementspeed * -1;
-                this.direction = 0;
-            } else if (this.game.keys["d"] && !this.game.keys["a"] && !this.game.keys["s"]) {
-                if (this.elapsedTimeWalk > this.walkSoundRate) {
-                    ASSET_MANAGER.playAsset("./sounds/player/Walk.wav")
-                    this.elapsedTimeWalk = 0;
-                }
-                this.velocityX = this.movementspeed;
-                this.direction = 1;
-            } else {
-                this.velocityX = 0;
-            };
-            this.x += this.velocityX * TICK;
     
             // Jumping mechanics
-            if (this.game.keys["w"] && !this.game.keys["s"] && this.velocityY == 0) {
+            if (this.game.keys["w"] && !this.game.keys["s"] && this.velocityY == 0 && this.elapsedjumptime >= this.jumpcooldown) {
                 ASSET_MANAGER.playAsset("./sounds/player/Jump.wav")
                 this.jumping = 1;
+                this.elapsedjumptime = 0;
                 this.velocityY = this.jumpingHeight;
-    
             } else if (this.game.keys["s"] && !this.game.keys["w"]) {
                 // Crouched mechanics
                 if (this.game.keys["a"] && !this.game.keys["d"]) {
@@ -146,10 +136,7 @@ class Player {
             // Y-position and velocityX updates
             this.y -= this.velocityY * TICK;
             this.velocityY -= this.gravity * TICK;
-            if (this.y > this.yBound) {
-                this.y = this.yBound
-                this.velocityY = 0;
-            }
+
              // Shooting mechanics for keyboard
             // if (this.game.keys["m"] && this.elapsedTime > this.fireRate) {
             //     const target = { x: this.x, y: this.y};
@@ -216,20 +203,20 @@ class Player {
                 // Collisions with other enemies and strucutres.
                 if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && !(entity instanceof Bullet) && 
                     !(entity instanceof EnemyBullet) && !(entity instanceof rope) && !(entity instanceof Explosion) && 
-                    !(entity instanceof Rocket) && !(entity instanceof pot) && !(entity instanceof Drone)) { 
+                    !(entity instanceof Rocket) && !(entity instanceof pot) && !(entity instanceof Drone) && !(entity instanceof golemboss)) { 
                     if (that.lastBB.bottom <= entity.BB.top && that.velocityY < 0) {  
                         that.yBound = entity.BB.top;
                         that.y = entity.BB.top - that.BB.height;     
                         that.velocityY = 0;
-                    } else if (that.BB.right >= entity.BB.left && that.velocityX >= 0 && (that.lastBB.top < entity.BB.bottom) && (that.BB.left < entity.BB.left)) {
-                        that.x = entity.BB.left - that.PLAYER_WIDTH * that.size - 27 + that.game.camera.x;
+                    } else if (that.BB.right >= entity.BB.left && (that.BB.left < entity.BB.left)) {
+                        that.canmoveright = false;
                         that.velocityX = 0;
-                    } else if (that.BB.left <= entity.BB.right && that.velocityX <= 0 && (that.lastBB.top < entity.BB.bottom) && (that.BB.right > entity.BB.right)) {
-                        that.x = entity.BB.right - that.PLAYER_WIDTH - 10 + that.game.camera.x;
+                    } else if (that.BB.left <= entity.BB.right  && (that.BB.right > entity.BB.right)) {
+                        console.log("lknasdf")
+                        that.canmoveleft = false;
                         that.velocityX = 0;
                     } else if (that.BB.top <= entity.BB.bottom && that.velocityY >= 0) {
-                        that.y = entity.BB.bottom;
-                        that.velocityY = .01;
+                        // Add for ceiling collision if wanted.
                     }
                 // Collisions with bullets.
                 } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof EnemyBullet) {
@@ -241,13 +228,10 @@ class Player {
                     ASSET_MANAGER.playAsset("./sounds/player/Hurt.wav")
                     entity.damageDone = true
                 } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && (entity instanceof rope)) {
-                    that.yBound = entity.BB.top;
                     //  that.velocityY +=that.gravity;  
                       if (that.game.keys["c"]) {   
-      
-                          that.velocityY =that.gravity* that.game.clockTick;   
-                          that.y += that.velocityY * that.game.clockTick;
-                      
+                        that.velocityY =that.gravity* that.game.clockTick;   
+                        that.y += that.velocityY * that.game.clockTick;
                       if (that.game.keys["w"]) { 
                           that.y-=500 * that.game.clockTick;   
                          // that.velocityY +=gravity;  
@@ -263,11 +247,28 @@ class Player {
                     }
                 } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof pot) {
                     that.gamewon = true;
-                } else {
-                    that.yBound = 2000;
                 }
             });
             that.updateBB();
+            if (this.game.keys["a"] && !this.game.keys["d"] && !this.game.keys["s"] && this.canmoveleft) {
+                if (this.elapsedTimeWalk > this.walkSoundRate) {
+                    ASSET_MANAGER.playAsset("./sounds/player/Walk.wav")
+                    this.elapsedTimeWalk = 0;
+                    
+                }
+                this.velocityX = this.movementspeed * -1;
+                this.direction = 0;
+            } else if (this.game.keys["d"] && !this.game.keys["a"] && !this.game.keys["s"] && this.canmoveright) {
+                if (this.elapsedTimeWalk > this.walkSoundRate) {
+                    ASSET_MANAGER.playAsset("./sounds/player/Walk.wav")
+                    this.elapsedTimeWalk = 0;
+                }
+                this.velocityX = this.movementspeed;
+                this.direction = 1;
+            } else {
+                this.velocityX = 0;
+            };
+            this.x += this.velocityX * TICK;
         }
         if (this.health <= 0) {
             ASSET_MANAGER.pauseBackgroundMusic();
