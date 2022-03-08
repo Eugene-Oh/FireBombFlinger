@@ -21,7 +21,14 @@ class Player {
         this.walkSoundRate = .4
         this.elapsedDeathTime = 0;
         this.fireRate = .30;
+        
+        this.jumpcooldown = .8;
+        this.elapsedjumptime = 10;
 
+        this.canmoveleft = false;
+        this.canmoveright = false;
+        this.lazer = false; 
+        this.rocket = false;
         this.PLAYER_WIDTH = 21;
         this.PLAYER_HEIGHT = 34;
 
@@ -96,37 +103,21 @@ class Player {
         const TICK = this.game.clockTick;
         this.elapsedTime += TICK;
         this.elapsedTimeWalk += TICK;
+        this.elapsedjumptime += TICK;
+        this.canmoveleft = true;
+        this.canmoveright = true;
         // Lateral and idle movements
         if (this.y > 720) {
             this.health = 0;
         }
         if (this.health > 0) {
-            if (this.game.keys["a"] && !this.game.keys["d"] && !this.game.keys["s"]) {
-                if (this.elapsedTimeWalk > this.walkSoundRate) {
-                    ASSET_MANAGER.playAsset("./sounds/player/Walk.wav")
-                    this.elapsedTimeWalk = 0;
-                    
-                }
-                this.velocityX = this.movementspeed * -1;
-                this.direction = 0;
-            } else if (this.game.keys["d"] && !this.game.keys["a"] && !this.game.keys["s"]) {
-                if (this.elapsedTimeWalk > this.walkSoundRate) {
-                    ASSET_MANAGER.playAsset("./sounds/player/Walk.wav")
-                    this.elapsedTimeWalk = 0;
-                }
-                this.velocityX = this.movementspeed;
-                this.direction = 1;
-            } else {
-                this.velocityX = 0;
-            };
-            this.x += this.velocityX * TICK;
     
             // Jumping mechanics
-            if (this.game.keys["w"] && !this.game.keys["s"] && this.velocityY == 0) {
+            if (this.game.keys["w"] && !this.game.keys["s"] && this.velocityY == 0 && this.elapsedjumptime >= this.jumpcooldown) {
                 ASSET_MANAGER.playAsset("./sounds/player/Jump.wav")
                 this.jumping = 1;
+                this.elapsedjumptime = 0;
                 this.velocityY = this.jumpingHeight;
-    
             } else if (this.game.keys["s"] && !this.game.keys["w"]) {
                 // Crouched mechanics
                 if (this.game.keys["a"] && !this.game.keys["d"]) {
@@ -146,10 +137,7 @@ class Player {
             // Y-position and velocityX updates
             this.y -= this.velocityY * TICK;
             this.velocityY -= this.gravity * TICK;
-            if (this.y > this.yBound) {
-                this.y = this.yBound
-                this.velocityY = 0;
-            }
+
              // Shooting mechanics for keyboard
             // if (this.game.keys["m"] && this.elapsedTime > this.fireRate) {
             //     const target = { x: this.x, y: this.y};
@@ -173,7 +161,7 @@ class Player {
 
             this.shooting = 0;
             // Shooting bullets on mouse click
-            if (this.game.click && this.game.shoot == true && this.elapsedTime > this.fireRate) {
+            if (this.game.click && this.game.shoot == true && this.elapsedTime > this.fireRate && this.rocket == false && this.lazer == false) {
                 ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
 				if (this.elapsedTime > this.fireRate) {
 				
@@ -197,7 +185,42 @@ class Player {
 			} 
 				this.game.shoot = false;
 				
-			} else if (this.game.click) {
+			}else if(this.game.click && this.game.shoot == true && this.elapsedTime > this.fireRate && this.rocket == true && lazer == false) { 
+                ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
+				if (this.elapsedTime > this.fireRate) {
+				
+				const target = { x: this.game.mouse.x + this.game.camera.x, y: this.game.mouse.y};
+				
+				if (this.jumping == -1) {
+	               // this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.x + 90, this.y + 20, 1000, 1.5, true, target)); 
+                   this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.x + 90, this.y + 3, true, this.direction, 5, this.bulletSpeed));  
+    
+                   console.log("if statement"); 
+	            } else {
+					console.log("else statement"); 
+	              //  this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, 1000, 1.5, true, target)); 
+                  this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.x + 90, this.y + 3, true, this.direction, 5, this.bulletSpeed));
+	            }
+	            this.elapsedTime = 0;
+				
+			} 
+				this.game.shoot = false;
+            } else if(this.game.click && this.game.shoot == true && this.elapsedTime > this.fireRate && this.lazer == true && this.rocket == false ) { 
+                ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
+				if (this.elapsedTime > this.fireRate) {
+				
+				const target = { x: this.game.mouse.x + this.game.camera.x, y: this.game.mouse.y};
+                    
+				if (this.jumping == -1) {
+	              //  this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.x + 90, this.y + 20, true, 1.5, 1000, target));
+	            } else {
+					
+	               // this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.x + 90 - this.PLAYER_WIDTH, this.y + 18, true, 1.5, 1000, target)); 
+                        this.game.addEntityToFrontOfList(new lazer(gameEngine));
+	            }
+	            this.elapsedTime = 0;
+            }	
+			}  else if (this.game.click) {
 				this.shooting = 0;
 			}
 			
@@ -216,20 +239,20 @@ class Player {
                 // Collisions with other enemies and strucutres.
                 if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && !(entity instanceof Bullet) && 
                     !(entity instanceof EnemyBullet) && !(entity instanceof rope) && !(entity instanceof Explosion) && 
-                    !(entity instanceof Rocket) && !(entity instanceof pot) && !(entity instanceof Drone)) { 
+                    !(entity instanceof Rocket) && !(entity instanceof pot) && !(entity instanceof Drone) && !(entity instanceof golemboss)&& !(entity instanceof rocketPickup) && !(entity instanceof lazerPickup) && !(entity instanceof lazer)) { 
                     if (that.lastBB.bottom <= entity.BB.top && that.velocityY < 0) {  
                         that.yBound = entity.BB.top;
                         that.y = entity.BB.top - that.BB.height;     
                         that.velocityY = 0;
-                    } else if (that.BB.right >= entity.BB.left && that.velocityX >= 0 && (that.lastBB.top < entity.BB.bottom) && (that.BB.left < entity.BB.left)) {
-                        that.x = entity.BB.left - that.PLAYER_WIDTH * that.size - 27 + that.game.camera.x;
+                    } else if (that.BB.right >= entity.BB.left && (that.BB.left < entity.BB.left)) {
+                        that.canmoveright = false;
                         that.velocityX = 0;
-                    } else if (that.BB.left <= entity.BB.right && that.velocityX <= 0 && (that.lastBB.top < entity.BB.bottom) && (that.BB.right > entity.BB.right)) {
-                        that.x = entity.BB.right - that.PLAYER_WIDTH - 10 + that.game.camera.x;
+                    } else if (that.BB.left <= entity.BB.right  && (that.BB.right > entity.BB.right)) {
+                        console.log("lknasdf")
+                        that.canmoveleft = false;
                         that.velocityX = 0;
                     } else if (that.BB.top <= entity.BB.bottom && that.velocityY >= 0) {
-                        that.y = entity.BB.bottom;
-                        that.velocityY = .01;
+                        // Add for ceiling collision if wanted.
                     }
                 // Collisions with bullets.
                 } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof EnemyBullet) {
@@ -241,13 +264,10 @@ class Player {
                     ASSET_MANAGER.playAsset("./sounds/player/Hurt.wav")
                     entity.damageDone = true
                 } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && (entity instanceof rope)) {
-                    that.yBound = entity.BB.top;
                     //  that.velocityY +=that.gravity;  
-                      if (that.game.keys["b"]) {   
-      
-                          that.velocityY =that.gravity* that.game.clockTick;   
-                          that.y += that.velocityY * that.game.clockTick;
-                      
+                      if (that.game.keys["c"]) {   
+                        that.velocityY =that.gravity* that.game.clockTick;   
+                        that.y += that.velocityY * that.game.clockTick;
                       if (that.game.keys["w"]) { 
                           that.y-=500 * that.game.clockTick;   
                          // that.velocityY +=gravity;  
@@ -263,11 +283,36 @@ class Player {
                     }
                 } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof pot) {
                     that.gamewon = true;
-                } else {
-                    that.yBound = 2000;
-                }
+                }else if(entity.BB && that.BB.collide(entity.BB) &&!(entity instanceof Player) && entity instanceof rocketPickup && that.lazer == false)  {  
+                    //  that.gamewon = true;
+                      that.rocket = true; 
+                      entity.remove();
+                  } else if(entity.BB && that.BB.collide(entity.BB) &&!(entity instanceof Player) && entity instanceof lazerPickup && that.rocket == false)  {  
+                    //  that.gamewon = true;
+                      that.lazer = true; 
+                      entity.remove();
+                  }
             });
             that.updateBB();
+            if (this.game.keys["a"] && !this.game.keys["d"] && !this.game.keys["s"] && this.canmoveleft) {
+                if (this.elapsedTimeWalk > this.walkSoundRate) {
+                    ASSET_MANAGER.playAsset("./sounds/player/Walk.wav")
+                    this.elapsedTimeWalk = 0;
+                    
+                }
+                this.velocityX = this.movementspeed * -1;
+                this.direction = 0;
+            } else if (this.game.keys["d"] && !this.game.keys["a"] && !this.game.keys["s"] && this.canmoveright) {
+                if (this.elapsedTimeWalk > this.walkSoundRate) {
+                    ASSET_MANAGER.playAsset("./sounds/player/Walk.wav")
+                    this.elapsedTimeWalk = 0;
+                }
+                this.velocityX = this.movementspeed;
+                this.direction = 1;
+            } else {
+                this.velocityX = 0;
+            };
+            this.x += this.velocityX * TICK;
         }
         if (this.health <= 0) {
             ASSET_MANAGER.pauseBackgroundMusic();

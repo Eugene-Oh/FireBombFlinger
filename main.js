@@ -50,7 +50,8 @@ ASSET_MANAGER.queueDownload("./items-spritesheet/enemy-bullet.png")
 ASSET_MANAGER.queueDownload("./items-spritesheet/player-bullet.png")
 ASSET_MANAGER.queueDownload("./items-spritesheet/rocket.png")
 ASSET_MANAGER.queueDownload("./items-spritesheet/explosion.png")
-ASSET_MANAGER.queueDownload("./items-spritesheet/pot.png")
+ASSET_MANAGER.queueDownload("./items-spritesheet/pot.png") 
+ASSET_MANAGER.queueDownload("./items-spritesheet/variousbullets.png")
 ASSET_MANAGER.queueDownload("./rope.png")
 
 ASSET_MANAGER.queueDownload("./Harbor_Assets.png")
@@ -79,6 +80,7 @@ ASSET_MANAGER.queueDownload("./harborLevel2.png")
 
 ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameWorld");
+	canvas.onselectstart = function () { return false; }
 	const ctx = canvas.getContext("2d");
 	ctx.imageSmoothingEnabled = false;
 	scene = new SceneManager(gameEngine);

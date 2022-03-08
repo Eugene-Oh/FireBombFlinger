@@ -7,7 +7,7 @@ class SceneManager {
         this.x = 0;
 
         this.score = 0;
-        this.mainplayer = new Player(gameEngine, 20, 0);
+        this.mainplayer = new Player(gameEngine,100,0);
         this.HUD = new HUD(gameEngine, this.mainplayer);
         this.starting = true;
         this.levelOne = false;
@@ -39,15 +39,20 @@ class SceneManager {
         this.levelOne = true;
         gameEngine.addEntity(this.mainplayer);
         gameEngine.addEntity(this.HUD);
+        
+
+        gameEngine.addEntity(new lazerPickup(gameEngine,7,37, 250,350,17,20,2)); 
+        gameEngine.addEntity(new rocketPickup(gameEngine,0,0,400,250,860,860,0.05)); 
+
+
 
         gameEngine.addEntity(new Drone(gameEngine, 1850, 2, 3))
         gameEngine.addEntity(new Drone(gameEngine, 3000, 2, 3))
         gameEngine.addEntity(new Drone(gameEngine, 4500, 2, 3))
         gameEngine.addEntity(new Drone(gameEngine, 5500, 2, 3))
-        gameEngine.addEntity(new pot(gameEngine, 7500, 250, 3))
+        gameEngine.addEntity(new pot(gameEngine, 7500, 250, 3)) 
 
         gameEngine.addEntity(new Sniper(gameEngine, 375, 0, 1));
-        gameEngine.addEntity(new Sniper(gameEngine, 980, 383, 0));
         gameEngine.addEntity(new Sniper(gameEngine, 2200, 510, 0));
     
         gameEngine.addEntity(new Rocket(gameEngine, 500, 200, 0));
@@ -62,6 +67,8 @@ class SceneManager {
         gameEngine.addEntity(new box(gameEngine,705,1,446,318,128,127,.5)); 
     
         gameEngine.addEntity(new boundingfloor(gameEngine,45,45,380,10)); 
+        gameEngine.addEntity(new boundingfloor(gameEngine,0,0,43,500)); 
+
         gameEngine.addEntity(new boundingfloor(gameEngine,630,130,130,10));
         gameEngine.addEntity(new boundingfloor(gameEngine,820,130,250,10));
         gameEngine.addEntity(new boundingfloor(gameEngine,0,510,500,10)); 
@@ -70,7 +77,6 @@ class SceneManager {
         gameEngine.addEntity(new boundingfloor(gameEngine,2210,428,425,10));
 
         gameEngine.addEntity(new rope(gameEngine,245,416,550,0,12,95,2)); 
-        gameEngine.addEntity(new rope(gameEngine,245,416,550,0 + 190,12,20,2)); 
 
         gameEngine.addEntity(new rope(gameEngine,245,416,1620,270 - 190,12,95,2)); 
         gameEngine.addEntity(new rope(gameEngine,245,416,1620,270,12,95,2)); 
@@ -155,8 +161,8 @@ class SceneManager {
         gameEngine.addEntity(new pot(gameEngine, 1485 * 2.4, 565, 3))
 
         // The starting and ending bounding walls
-        gameEngine.addEntity(new boundingfloor(gameEngine,-610,0, 10, 1000));
-        gameEngine.addEntity(new boundingfloor(gameEngine, 1485,0, 10, 1000));
+        gameEngine.addEntity(new boundingfloor(gameEngine,-610,0, 100, 1000));
+        gameEngine.addEntity(new boundingfloor(gameEngine, 1485,0, 100, 1000));
 
         gameEngine.addEntity(new boundingfloor(gameEngine,-1485 * 2,610, 1485 * 5, 10));
         
