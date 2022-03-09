@@ -42,7 +42,8 @@ class SceneManager {
         
 
         gameEngine.addEntity(new lazerPickup(gameEngine,7,37, 250,350,17,20,2)); 
-        gameEngine.addEntity(new rocketPickup(gameEngine,0,0,400,250,860,860,0.05)); 
+        gameEngine.addEntity(new rocketPickup(gameEngine,0,0,400,250,860,860,0.05));  
+        gameEngine.addEntity(new explosiveBulletPickup(gameEngine,338,2,100,250,13,13,1)); 
 
 
 

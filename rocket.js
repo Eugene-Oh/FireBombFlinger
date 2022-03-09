@@ -38,9 +38,15 @@ class Rocket {
 		var that = this;
 		this.game.entities.forEach(function(entity){
 			if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Rocket)) { 
-                if (entity instanceof boundingfloor || entity instanceof Player) {
+                if (entity instanceof boundingfloor || entity instanceof Player || entity instanceof Sniper /*|| entity instanceof RPG*/) {
                     that.game.addEntityToFrontOfList(new Explosion(gameEngine, that.x, that.y, 5, false))
-                    that.remove()
+                    that.remove();
+                } else if(entity instanceof Sniper || entity instanceof RPG) { 
+                    that.game.addEntityToFrontOfList(new Explosion(gameEngine, that.x, that.y, 5, false))
+                    that.remove();
+                    entity.remove(); 
+                    entity.remove(); 
+                    entity.remove();
                 }
             }
 		});
