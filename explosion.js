@@ -26,7 +26,7 @@ class Explosion {
 		this.game.entities.forEach(function(entity){
 			if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Explosion) && entity instanceof Player) { 
                 // No implementation needed yet. 
-            } else if(entity.BB && that.BB.collide(entity.BB) && (entity instanceof RPG || entity instanceof Sniper || entity instanceof Drone)) { 
+            } else if(entity.BB && that.BB.collide(entity.BB) && (entity instanceof RPG || entity instanceof Sniper /*|| entity instanceof Drone*/)) { 
               //  entity.remove(); 
                // that.remove();
             }

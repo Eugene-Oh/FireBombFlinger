@@ -30,7 +30,8 @@ class Player {
         this.canmoveright = false;
         this.lazer = false; 
         this.rocket = false; 
-        this.explosiveBullet = false;
+        this.explosiveBullet = false;  
+        this.rocketCount = 5;
         this.PLAYER_WIDTH = 21;
         this.PLAYER_HEIGHT = 34;
 
@@ -162,7 +163,12 @@ class Player {
             // } 
 
             this.shooting = 0;
-            // Shooting bullets on mouse click
+            // Shooting bullets on mouse click 
+            if(this.rocket == true && this.rocketCount <=0) {  
+                console.log("logCount)"); 
+                console.log(this.rocketCount);
+                this.rocket == false;
+            }
             if (this.game.click && this.game.shoot == true && this.elapsedTime > this.fireRate && this.rocket == false && this.lazer == false && this.explosiveBullet == false ) {
                 ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
 				if (this.elapsedTime > this.fireRate) {
@@ -216,9 +222,10 @@ class Player {
 
              }  else if(this.game.click && this.game.shoot == true && this.elapsedTime >this.rocketFireRate && this.rocket == true && this.explosiveBullet == false && this.lazer == false ) { 
                 ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav") 
-                console.log("else if case"); 
+                console.log("else if case");   
+                this.rocketCount=this.rocketCount-1;
 				if (this.elapsedTime > this.fireRate) {
-				
+                   // this.rocketCount--;
 				const target = { x: this.game.mouse.x + this.game.camera.x, y: this.game.mouse.y};
 				
 				if (this.jumping == -1) {
