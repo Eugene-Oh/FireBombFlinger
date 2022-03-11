@@ -39,12 +39,19 @@ class SceneManager {
         this.levelOne = true;
         gameEngine.addEntity(this.mainplayer);
         gameEngine.addEntity(this.HUD);
+        
+
+       // gameEngine.addEntity(new lazerPickup(gameEngine,7,37, 250,350,17,20,2)); 
+        gameEngine.addEntity(new rocketPickup(gameEngine,0,0,800,80,860,860,0.05));  
+        gameEngine.addEntity(new explosiveBulletPickup(gameEngine,338,2,50,25,13,13,1)); 
+
+
 
         gameEngine.addEntity(new Drone(gameEngine, 1850, 2, 3))
         gameEngine.addEntity(new Drone(gameEngine, 3000, 2, 3))
         gameEngine.addEntity(new Drone(gameEngine, 4500, 2, 3))
         gameEngine.addEntity(new Drone(gameEngine, 5500, 2, 3))
-        gameEngine.addEntity(new pot(gameEngine, 7500, 250, 3))
+        gameEngine.addEntity(new pot(gameEngine, 7500, 250, 3)) 
 
         gameEngine.addEntity(new Sniper(gameEngine, 375, 0, 1));
         gameEngine.addEntity(new Sniper(gameEngine, 2200, 510, 0));
@@ -54,6 +61,8 @@ class SceneManager {
         gameEngine.addEntity(new RPG(gameEngine, 600, 70, 0));
         gameEngine.addEntity(new RPG(gameEngine, 1000, 70, 1));
         gameEngine.addEntity(new RPG(gameEngine, 2370, 198, 0));
+
+		gameEngine.addEntity(new MeleeEnemy(gameEngine, 700, 195, 0, this.mainplayer));
     
         gameEngine.addEntity(new box(gameEngine,705,1,384,382,128,127, 1)); 
         gameEngine.addEntity(new box(gameEngine,705,1,0,446,128,127,.5));  

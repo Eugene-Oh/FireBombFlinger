@@ -46,7 +46,7 @@ class Bullet {
 		//Collision
 		this.game.entities.forEach(function(entity){
 			if(entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Bullet)) { 
-                if (entity instanceof Sniper || entity instanceof RPG || entity instanceof Drone || entity instanceof golemboss) {
+                if (entity instanceof Sniper || entity instanceof RPG || entity instanceof Drone || entity instanceof golemboss || entity instanceof MeleeEnemy) {
                     that.remove();
 					entity.remove();
                 }else if(entity instanceof box) { 
