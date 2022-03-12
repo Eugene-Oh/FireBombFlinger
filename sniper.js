@@ -11,6 +11,8 @@ class Sniper {
 
         this.health = 1;
 
+		this.healthBar = new HealthBar(this);
+
         this.fireRate = 1;
         this.elapsedTime = 2
         this.bulletSpeed = 750;
@@ -107,5 +109,6 @@ class Sniper {
             ctx.strokeStyle = 'white';
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
          }
+		this.healthBar.draw(ctx);
     }
 }

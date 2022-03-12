@@ -46,7 +46,7 @@ class explosiveBullet {
 		//Collision
 		this.game.entities.forEach(function(entity){
 			if(entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Bullet)) { 
-                if (entity instanceof Sniper || entity instanceof RPG || entity instanceof Drone || entity instanceof golemboss) { 
+                if (entity instanceof Sniper || entity instanceof RPG || entity instanceof Drone || entity instanceof golemboss || entity instanceof MeleeEnemy) { 
                     that.game.addEntityToFrontOfList(new Explosion(gameEngine, that.x+75, that.y+75, 2, false));
                     that.remove();
 					entity.remove(); 

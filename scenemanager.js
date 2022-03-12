@@ -61,6 +61,8 @@ class SceneManager {
         gameEngine.addEntity(new RPG(gameEngine, 600, 70, 0));
         gameEngine.addEntity(new RPG(gameEngine, 1000, 70, 1));
         gameEngine.addEntity(new RPG(gameEngine, 2370, 198, 0));
+
+		gameEngine.addEntity(new MeleeEnemy(gameEngine, 700, 195, 0, this.mainplayer));
     
         gameEngine.addEntity(new box(gameEngine,705,1,384,382,128,127, 1)); 
         gameEngine.addEntity(new box(gameEngine,705,1,0,446,128,127,.5));  
@@ -239,15 +241,7 @@ class HUD {
         if (!(this.mainplayer.gamewon == true) && !(this.mainplayer.health == 0 && this.mainplayer.elapsedDeathTime > 1.5)) {
             ctx.font = "30px Arial";
             ctx.fillStyle = 'White';
-            ctx.fillText("Health: " + this.mainplayer.health + "/" + this.mainplayer.totalHealth, 100, 35);  
-            if(this.mainplayer.rocket == true) { 
-                ctx.fillText("Rocket Ammo:"+this.mainplayer.rocketCount+"/"+30,650,35);
-            } 
-            if(this.mainplayer.explosiveBullet == true) { 
-                ctx.fillText("HE Ammo:"+this.mainplayer.explosiveBulletCount+"/"+30,350,35); 
-            }
-          //   ctx.fillText("HE Ammo:"+this.mainplayer.explosiveBulletCount+"/"+30,350,35); 
-           // ctx.fillText("Rocket Ammo:"+this.mainplayer.rocketCount+"/"+30,650,35);
+            ctx.fillText("Health: " +  Math.round(this.mainplayer.health) + "/" + this.mainplayer.totalHealth, 100, 35);
         }
     };
 }
