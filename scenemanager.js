@@ -39,12 +39,19 @@ class SceneManager {
         this.levelOne = true;
         gameEngine.addEntity(this.mainplayer);
         gameEngine.addEntity(this.HUD);
+        
+
+       // gameEngine.addEntity(new lazerPickup(gameEngine,7,37, 250,350,17,20,2)); 
+        gameEngine.addEntity(new rocketPickup(gameEngine,0,0,800,80,860,860,0.05));  
+        gameEngine.addEntity(new explosiveBulletPickup(gameEngine,338,2,50,25,13,13,1)); 
+
+
 
         gameEngine.addEntity(new Drone(gameEngine, 1850, 2, 3))
         gameEngine.addEntity(new Drone(gameEngine, 3000, 2, 3))
         gameEngine.addEntity(new Drone(gameEngine, 4500, 2, 3))
         gameEngine.addEntity(new Drone(gameEngine, 5500, 2, 3))
-        gameEngine.addEntity(new pot(gameEngine, 7500, 250, 3))
+        gameEngine.addEntity(new pot(gameEngine, 7500, 250, 3)) 
 
         gameEngine.addEntity(new Sniper(gameEngine, 375, 0, 1));
         gameEngine.addEntity(new Sniper(gameEngine, 2200, 510, 0));
@@ -232,7 +239,15 @@ class HUD {
         if (!(this.mainplayer.gamewon == true) && !(this.mainplayer.health == 0 && this.mainplayer.elapsedDeathTime > 1.5)) {
             ctx.font = "30px Arial";
             ctx.fillStyle = 'White';
-            ctx.fillText("Health: " + this.mainplayer.health + "/" + this.mainplayer.totalHealth, 100, 35);
+            ctx.fillText("Health: " + this.mainplayer.health + "/" + this.mainplayer.totalHealth, 100, 35);  
+            if(this.mainplayer.rocket == true) { 
+                ctx.fillText("Rocket Ammo:"+this.mainplayer.rocketCount+"/"+30,650,35);
+            } 
+            if(this.mainplayer.explosiveBullet == true) { 
+                ctx.fillText("HE Ammo:"+this.mainplayer.explosiveBulletCount+"/"+30,350,35); 
+            }
+          //   ctx.fillText("HE Ammo:"+this.mainplayer.explosiveBulletCount+"/"+30,350,35); 
+           // ctx.fillText("Rocket Ammo:"+this.mainplayer.rocketCount+"/"+30,650,35);
         }
     };
 }

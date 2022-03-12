@@ -37,7 +37,7 @@ class Drone {
         // Player detection
         if ((this.x - this.game.camera.x > 100 && this.x - this.game.camera.x < 1180)) {
             if (this.elapsedTime >= this.fireRate && this.removeFromWorld != true) {
-                this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.x + 21, this.y + 20, true, 1, .035, 0));
+                this.game.addEntityToFrontOfList(new Rocket(gameEngine, this.x + 21, this.y + 40, true, 1, .035, 0));
                 this.elapsedTime = 0;
             }
         }
