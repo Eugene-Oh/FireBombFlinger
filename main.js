@@ -41,6 +41,13 @@ ASSET_MANAGER.queueDownload("./rpgsprite/rpgidlereverse.png")
 ASSET_MANAGER.queueDownload("./rpgsprite/rpgshooting.png")
 ASSET_MANAGER.queueDownload("./rpgsprite/rpgshootingreverse.png")
 
+ASSET_MANAGER.queueDownload("./monstersprite/monsterIdle.png")
+ASSET_MANAGER.queueDownload("./monstersprite/monsterWalk.png")
+ASSET_MANAGER.queueDownload("./monstersprite/monsterWalkReverse.png")
+ASSET_MANAGER.queueDownload("./monstersprite/monsterAttack.png")
+ASSET_MANAGER.queueDownload("./monstersprite/monsterAttackReverse.png")
+ASSET_MANAGER.queueDownload("./monstersprite/monsterDeath.png")
+
 ASSET_MANAGER.queueDownload("./dronesprite/drone.png")
 
 ASSET_MANAGER.queueDownload("./enemydeath/enemydeath.png")
@@ -50,7 +57,8 @@ ASSET_MANAGER.queueDownload("./items-spritesheet/enemy-bullet.png")
 ASSET_MANAGER.queueDownload("./items-spritesheet/player-bullet.png")
 ASSET_MANAGER.queueDownload("./items-spritesheet/rocket.png")
 ASSET_MANAGER.queueDownload("./items-spritesheet/explosion.png")
-ASSET_MANAGER.queueDownload("./items-spritesheet/pot.png")
+ASSET_MANAGER.queueDownload("./items-spritesheet/pot.png") 
+ASSET_MANAGER.queueDownload("./items-spritesheet/variousbullets.png")
 ASSET_MANAGER.queueDownload("./rope.png")
 
 ASSET_MANAGER.queueDownload("./Harbor_Assets.png")
