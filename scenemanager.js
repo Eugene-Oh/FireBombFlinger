@@ -239,7 +239,15 @@ class HUD {
         if (!(this.mainplayer.gamewon == true) && !(this.mainplayer.health == 0 && this.mainplayer.elapsedDeathTime > 1.5)) {
             ctx.font = "30px Arial";
             ctx.fillStyle = 'White';
-            ctx.fillText("Health: " + this.mainplayer.health + "/" + this.mainplayer.totalHealth, 100, 35);
+            ctx.fillText("Health: " + this.mainplayer.health + "/" + this.mainplayer.totalHealth, 100, 35);  
+            if(this.mainplayer.rocket == true) { 
+                ctx.fillText("Rocket Ammo:"+this.mainplayer.rocketCount+"/"+30,650,35);
+            } 
+            if(this.mainplayer.explosiveBullet == true) { 
+                ctx.fillText("HE Ammo:"+this.mainplayer.explosiveBulletCount+"/"+30,350,35); 
+            }
+          //   ctx.fillText("HE Ammo:"+this.mainplayer.explosiveBulletCount+"/"+30,350,35); 
+           // ctx.fillText("Rocket Ammo:"+this.mainplayer.rocketCount+"/"+30,650,35);
         }
     };
 }

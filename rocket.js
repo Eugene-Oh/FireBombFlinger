@@ -41,7 +41,7 @@ class Rocket {
                 if (entity instanceof boundingfloor || entity instanceof Player /*|| entity instanceof Sniper */ /*|| entity instanceof RPG*/) {
                     that.game.addEntityToFrontOfList(new Explosion(gameEngine, that.x, that.y, 5, false))
                     that.remove();
-                } else if(entity instanceof Sniper || entity instanceof RPG ) { 
+                } else if(entity instanceof Sniper || entity instanceof RPG || entity instanceof Drone ) { 
                     that.game.addEntityToFrontOfList(new Explosion(gameEngine, that.x, that.y, 5, false))
                     that.remove();
                     entity.remove(); 

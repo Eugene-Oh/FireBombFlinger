@@ -28,9 +28,11 @@ class Player {
 
         this.canmoveleft = false;
         this.canmoveright = false;
-        this.lazer = false; 
+        this.lazer = false;  
+        //this.rocket = 0;
         this.rocket = false; 
-        this.explosiveBullet = false;  
+        this.explosiveBullet = false;    
+        this.explosiveBulletCount = 10;
         this.rocketCount = 5;
         this.PLAYER_WIDTH = 21;
         this.PLAYER_HEIGHT = 34;
@@ -113,8 +115,13 @@ class Player {
         if (this.y > 720) {
             this.health = 0;
         }
-        if (this.health > 0) {
-    
+        if (this.health > 0) { 
+              //  this.rocket = false;
+            if(this.game.keys["F"]) {  
+                console.log("F");
+            //    this.rocket = !this.rocket; 
+                this.rocket = false;
+            }
             // Jumping mechanics
             if (this.game.keys["w"] && !this.game.keys["s"] && this.velocityY == 0 && this.elapsedjumptime >= this.jumpcooldown) {
                 ASSET_MANAGER.playAsset("./sounds/player/Jump.wav")
@@ -135,7 +142,8 @@ class Player {
                 } else if (this.game.keys["d"] && !this.game.keys["a"]) {
                     this.direction = 1;
                 }
-                this.jumping = 0;
+                this.jumping = 0; 
+               
             }
             // Y-position and velocityX updates
             this.y -= this.velocityY * TICK;
@@ -164,11 +172,19 @@ class Player {
 
             this.shooting = 0;
             // Shooting bullets on mouse click 
-            if(this.rocket == true && this.rocketCount <=0) {  
+            if(this.rocketCount <0) {  
                 console.log("logCount)"); 
                 console.log(this.rocketCount);
-                this.rocket == false;
+                this.rocket = false;
+            } 
+
+            if(this.explosiveBulletCount <0) {  
+                console.log("logCount)"); 
+                console.log(this.explosiveBulletCount);
+                this.explosiveBullet = false;
             }
+
+
             if (this.game.click && this.game.shoot == true && this.elapsedTime > this.fireRate && this.rocket == false && this.lazer == false && this.explosiveBullet == false ) {
                 ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
 				if (this.elapsedTime > this.fireRate) {
@@ -194,7 +210,7 @@ class Player {
 				this.game.shoot = false;
 				
 			}else if(this.game.click && this.game.shoot == true && this.elapsedTime > this.explosiveBulletFireRate && this.explosiveBullet == true )  {  
-
+                    this.explosiveBulletCount--;
                 ASSET_MANAGER.playAsset("./sounds/player/Shoot.wav")
 				if (this.elapsedTime > this.fireRate) {
 				
@@ -217,7 +233,7 @@ class Player {
 				
 			} 
 				this.game.shoot = false;
-				
+			
 
 
              }  else if(this.game.click && this.game.shoot == true && this.elapsedTime >this.rocketFireRate && this.rocket == true && this.explosiveBullet == false && this.lazer == false ) { 
@@ -323,7 +339,8 @@ class Player {
                 } else if (entity.BB && that.BB.collide(entity.BB) && !(entity instanceof Player) && entity instanceof pot) {
                     that.gamewon = true;
                 }else if(entity.BB && that.BB.collide(entity.BB) &&!(entity instanceof Player) && entity instanceof rocketPickup && that.lazer == false && that.explosiveBullet == false )  {  
-                    //  that.gamewon = true;
+                    //  that.gamewon = true; 
+                     console.log("rocket on");
                       that.rocket = true; 
                       entity.remove();
                   } else if(entity.BB && that.BB.collide(entity.BB) &&!(entity instanceof Player) && entity instanceof explosiveBulletPickup && that.lazer == false && that.rocket == false)  {  
