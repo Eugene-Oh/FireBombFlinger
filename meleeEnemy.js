@@ -22,7 +22,7 @@ class MeleeEnemy {
 		this.velocityX = 0;
 		this.velocityY = 0;
 		
-		this.wakeDetection = 200;
+		this.wakeDetection = 10;
 		this.wakeTime = 2.3;
 		
 		this.isIdle = true;
@@ -51,6 +51,9 @@ class MeleeEnemy {
 		this.attackreverseanimator = new Animator(ASSET_MANAGER.getAsset("./monstersprite/monsterAttackReverse.png"), 
         	0, 0, 140, 70, 8, this.animationspeed);
 
+		this.deathanimator = new Animator(ASSET_MANAGER.getAsset("./monstersprite/monsterDeath.png"), 
+        0, 0, 140, 72, 16, this.animationspeed);
+
         this.updateBB();
     };
 
@@ -59,7 +62,7 @@ class MeleeEnemy {
         if (this.direction == 1) {
             this.BB = new BoundingBox(this.x + 120 - this.game.camera.x, this.y, 88, 100);
         } else {
-            this.BB = new BoundingBox(this.x + 140 - this.game.camera.x, this.y, 88, 100);
+            this.BB = new BoundingBox(this.x + 100 - this.game.camera.x, this.y, 88, 100);
         }
     };
 
@@ -137,7 +140,7 @@ class MeleeEnemy {
 		
 		
 		if (this.health <= 0){
-			this.remove;
+			this.removeFromWorld = true;
 		}
 		
 		if (this.removeFromWorld == false) {
@@ -173,15 +176,19 @@ class MeleeEnemy {
 					this.walkreverseanimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.size)
 				}
 			} else if (this.isAttacking == true) {
-				if (this.direction == 0) {
+				if (this.direction == 1) {
 					this.attackreverseanimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.size)
-				} else if (this.direction == 1){
+				} else {
 					this.attackanimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.size)
 				}
 				
 			}
 
-			
+		} else {
+			if (this.removeFromWorld == true){
+				this.deathanimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.size)
+
+			}
 		}
         
         // To see the bounding box
